@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml" prefHeight="210"
+	prefWidth="210" fx:controller="application.RootController">
+	<children>
+		<BorderPane>
+			<top>
+				<BorderPane style="-fx-background-color: #eaeaea;">
+					<center>
+						<Label text="J.R.C FX Server Frame" />
+					</center>
+
+					<right>
+						<Button fx:id="btnLogin" text="Server" />
+
+					</right>
+					<padding>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+					</padding>
+				</BorderPane>
+			</top>
+
+			<HBox fx:id="boxb" layoutX="-10" layoutY="80">
+			</HBox>
+
+		</BorderPane>
+	</children>
+</StackPane>
+

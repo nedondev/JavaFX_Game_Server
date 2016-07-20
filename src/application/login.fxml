@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:id="login"
+	prefHeight="480" prefWidth="480" fx:controller="application.LoginController">
+	<top>
+		<BorderPane style="-fx-background-color: #eaeaea;">
+			<left>
+				<Button fx:id="btnMain" text="Logo" />
+			</left>
+			<center>
+				<Label text="Server Control Window" />
+			</center>
+			<padding>
+				<Insets bottom="10.0" left="40.0" right="10.0" top="10.0" />
+			</padding>
+		</BorderPane>
+	</top>
+
+	<center>
+		<BorderPane>
+			<left>
+				<TextArea fx:id="textArea" prefWidth="330" />
+			</left>
+
+			<right>
+				<ListView fx:id="clientListView" prefWidth="150"
+					prefHeight="100" orientation="VERTICAL"></ListView>
+			</right>
+
+	<bottom>
+				<TextField fx:id="serverTextEdit" editable="false"
+					prefWidth="390" prefHeight="25" visible="false" />
+	</bottom>
+
+		</BorderPane>
+	</center>
+
+
+
+</BorderPane>

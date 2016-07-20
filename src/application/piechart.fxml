@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.Label?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" prefHeight="480"
+	prefWidth="480">
+	<center>
+		<AnchorPane>
+			<PieChart id="pieChart" prefHeight="300" prefWidth="480"
+				centerShape="true" labelsVisible="true" />
+			<Label id="label" text="" />
+
+			<Label layoutX="20" layoutY="280" text="게임 기록" />
+
+			<TableView id="tableView" layoutX="20" layoutY="300"
+				prefHeight="75" prefWidth="445">
+				<columns>
+					<TableColumn prefWidth="143" resizable="false" text="게임 이름" />
+					<TableColumn prefWidth="100" resizable="false" text="승" />
+					<TableColumn prefWidth="100" resizable="false" text="패" />
+					<TableColumn prefWidth="100" resizable="false" text="시간" />
+				</columns>
+			</TableView>
+
+			<TableView id="tableAccess" layoutX="20" layoutY="385"
+				prefHeight="75" prefWidth="445">
+				<columns>
+					<TableColumn prefWidth="128" resizable="false" text="ip" />
+					<TableColumn prefWidth="200" resizable="false" text="접속 시간" />
+					<TableColumn prefWidth="100" resizable="false" text="종류" />
+				</columns>
+			</TableView>
+
+		</AnchorPane>
+	</center>
+	<bottom>
+		<HBox alignment="CENTER" prefHeight="50.0">
+			<children>
+
+				<Button id="btnClose" text="닫기" />
+			</children>
+		</HBox>
+	</bottom>
+</BorderPane>
