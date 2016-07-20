@@ -31,7 +31,7 @@ public class AppMain extends Application {
         System.out.println("Start Server");
 
         // set the window's title
-        primaryStage.setTitle("J.R.C Server");
+        primaryStage.setTitle(Settings.sServerTitle);
         // load the fxml resource
         Parent root = FXMLLoader.load(getClass().getResource("root.fxml"));
         // set the fxml resource to the scene

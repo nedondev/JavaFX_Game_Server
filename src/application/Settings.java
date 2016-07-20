@@ -577,4 +577,6 @@ public class Settings {
     public static final String sBuildingVersionFileName = "serverV.jrc";
     
     public static final String sServerInfo = "serverinfo.jrc";
+    
+    public static final String sServerTitle = "J.R.C Server";
 }
