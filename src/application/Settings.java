@@ -568,9 +568,9 @@ public class Settings {
     
     public static final String DBName = "test";
     
-    public static String clientVersion = "0.0.1v";
-    
     public static final boolean isDevelopingMode = true;
+    
+    public static String clientVersion = "0.0.1v";
     
     public static int nBuildingTimes;
     
@@ -579,4 +579,13 @@ public class Settings {
     public static final String sServerInfo = "serverinfo.jrc";
     
     public static final String sServerTitle = "J.R.C Server";
+    
+    public static final String sSenderSplitProtocolToken = "/&";
+    
+    public static final String sReceiverSplitProtocolToken = "/";
+    
+    
+    public static final String sSenderSplitMultipleToken = "@";
+
+    public static final String sReceiverSplitMultipleToken = "@";
 }
