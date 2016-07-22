@@ -9,6 +9,6 @@ you must follow below steps.
 
 2. set the password in logincontoller.
 
-3. build this server.
+3. build this server. (this server is optimized for https://github.com/jrcforever/JavaFX_Game_Client)
 
 if you have a question or curious some thing. if so, send to me a e-mail ( jrcright1004@gmail.com). thank you.
