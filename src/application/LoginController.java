@@ -361,6 +361,16 @@ public class LoginController implements Initializable {
 
 			stmt.executeUpdate(sql);
 		}
+		
+		// pangpang score saving position.
+		rs = stmt.executeQuery("show tables from test like'pangpang'");
+		if (false == rs.next()) {
+			String sql = "CREATE TABLE pangpang " + "(id varchar(10) not NULL, " + " win integer(1), "
+					+ " defeat integer(1), " + " playtimes integer(1), "+ " score integer(10), " + " PRIMARY KEY ( id ),"
+					+ "FOREIGN KEY (id) REFERENCES userinformation (id)) Engine=Innodb default charset = utf8";
+
+			stmt.executeUpdate(sql);
+		}
 	}
 
 	public EventHandler<KeyEvent> message_text_Validation(final Integer max_Lengh) {
