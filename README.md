@@ -2,7 +2,6 @@
 ####this project made by j.r.c Jong Uk.
 ####this project's purpose is that service game server, or other server.
 
-
 if you want to use this server.
 
 you must follow below steps.
