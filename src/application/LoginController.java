@@ -361,12 +361,13 @@ public class LoginController implements Initializable {
 
 			stmt.executeUpdate(sql);
 		}
-		
+
 		// pangpang score saving position.
 		rs = stmt.executeQuery("show tables from test like'pangpang'");
 		if (false == rs.next()) {
 			String sql = "CREATE TABLE pangpang " + "(id varchar(10) not NULL, " + " win integer(1), "
-					+ " defeat integer(1), " + " playtimes integer(1), "+ " score integer(10), " + " PRIMARY KEY ( id ),"
+					+ " defeat integer(1), " + " playtimes integer(1), " + " score integer(10), "
+					+ " PRIMARY KEY ( id ),"
 					+ "FOREIGN KEY (id) REFERENCES userinformation (id)) Engine=Innodb default charset = utf8";
 
 			stmt.executeUpdate(sql);
@@ -728,7 +729,6 @@ public class LoginController implements Initializable {
 					// gmail
 					case "-findid":
 						if (isMakeSudoId == true) {
-							System.out.println("testing");
 							if (sCommandWords[2].equals(sEmailAddress)) {
 								sSudoID = sCommandWords[2];
 								sSudoPassword = sCommandWords[3];
@@ -872,20 +872,20 @@ public class LoginController implements Initializable {
 
 							if (existId) {
 								Platform.runLater(() -> displayText(sCommandWords[2] + "info"));
-								query = "SELECT id,win,defeat,playtime FROM tictactoc where id='" + sCommandWords[2]
+								query = "SELECT id,win,defeat,playtimes FROM tictactoc where id='" + sCommandWords[2]
 										+ "'";
 
 								rs = stmt.executeQuery(query);
 								while (rs.next()) {
 									String win = rs.getString("win");
 									String defeat = rs.getString("defeat");
-									String playtime = rs.getString("playtime");
+									String playtime = rs.getString("playtimes");
 
 									Platform.runLater(() -> displayText(
 											"tictacotc win:" + win + " defeat:" + defeat + " playtime:" + playtime));
 
 								}
-								query = "SELECT id,win,defeat,playtime FROM catchme where id='" + sCommandWords[2]
+								query = "SELECT id,win,defeat,playtimes FROM catchme where id='" + sCommandWords[2]
 										+ "'";
 
 								rs = stmt.executeQuery(query);
@@ -893,7 +893,20 @@ public class LoginController implements Initializable {
 								while (rs.next()) {
 									String win = rs.getString("win");
 									String defeat = rs.getString("defeat");
-									String playtime = rs.getString("playtime");
+									String playtime = rs.getString("playtimes");
+
+									Platform.runLater(() -> displayText(
+											"catchme win:" + win + " defeat:" + defeat + " playtime:" + playtime));
+								}
+								query = "SELECT id,win,defeat,playtimes FROM meteor where id='" + sCommandWords[2]
+										+ "'";
+
+								rs = stmt.executeQuery(query);
+
+								while (rs.next()) {
+									String win = rs.getString("win");
+									String defeat = rs.getString("defeat");
+									String playtime = rs.getString("playtimes");
 
 									Platform.runLater(() -> displayText(
 											"catchme win:" + win + " defeat:" + defeat + " playtime:" + playtime));
@@ -1799,6 +1812,63 @@ public class LoginController implements Initializable {
 								 */
 								case Settings._REQUEST_WAITING_ROOM_SENDING_MESSAGE:
 									AddQueryDataSet("R REQUESTWAITINGROOMSENDINGMESSAGE", data.length());
+
+									String[] sMessageProtocol = splitPacket[1].split(" ");
+
+									sMessageProtocol[0] = sMessageProtocol[0].toLowerCase();
+
+									if (sMessageProtocol[0].equals("-info")) {
+
+										if (false == waitingRoomMessageValidCheck(sMessageProtocol))
+											break;
+
+										query = "SELECT id,win,defeat,playtimes FROM " + sMessageProtocol[2]
+												+ " where id='" + sMessageProtocol[1] + "'";
+
+										try {
+											rs = stmt.executeQuery(query);
+										} catch (SQLException e) {
+											sendPacket(Settings._ANSWER_WAITING_ROOM_SENDING_MESSAGE + "",
+													"Wrong command", "error");
+											break;
+										}
+										if (rs.next()) {
+											String win = rs.getString("win");
+											String defeat = rs.getString("defeat");
+											String playtime = rs.getString("playtimes");
+
+											sendPacket(
+													Settings._ANSWER_WAITING_ROOM_SENDING_MESSAGE + "", "win:" + win
+															+ " " + "defeat:" + defeat + " " + "playtime:" + playtime,
+													sMessageProtocol[1] + " -info");
+
+											break;
+										}
+									} else if (sMessageProtocol[0].equals("-w")) {
+
+										if (false == waitingRoomMessageValidCheck(sMessageProtocol))
+											break;
+
+										String sSendingMessage = "";
+
+										for (int i = 2; i < sMessageProtocol.length; i++)
+											sSendingMessage += sMessageProtocol[i] + " ";
+
+										if (sSendingMessage == "")
+											break;
+
+										for (Client client : connections)
+											if (client.getClientName().equals(getClientName())
+													|| client.getClientName().equals(sMessageProtocol[1])) {
+												client.sendPacket(Settings._ANSWER_WAITING_ROOM_SENDING_MESSAGE + "",
+														sSendingMessage, Client.this.getClientName() + " -w");
+												client.sendPacket(Settings._ANSWER_ROOM_MEMEBER_MESSAGE + "",
+														sSendingMessage, Client.this.getClientName() + " -w");
+											}
+										break;
+
+									}
+
 									for (Client client : connections) {
 										client.sendPacket(Settings._ANSWER_WAITING_ROOM_SENDING_MESSAGE + "",
 												splitPacket[1], Client.this.getClientName());
@@ -2396,6 +2466,23 @@ public class LoginController implements Initializable {
 						} catch (IOException e2) {
 						}
 					}
+				}
+
+				private boolean waitingRoomMessageValidCheck(String[] sMessageProtocol) {
+
+					if (sMessageProtocol.length <= 2) {
+
+						sendPacket(Settings._ANSWER_WAITING_ROOM_SENDING_MESSAGE + "", "Wrong command", "error");
+						return false;
+					}
+
+					if (!items.contains(sMessageProtocol[1])) {
+						sendPacket(Settings._ANSWER_WAITING_ROOM_SENDING_MESSAGE + "",
+								sMessageProtocol[1] + " is not entered in server", "error");
+						return false;
+					}
+
+					return true;
 				}
 
 				private void initUserDBinformation(String[] splitPacket) throws SQLException {
@@ -3469,9 +3556,82 @@ public class LoginController implements Initializable {
 
 			}
 
+			Client _client = null;
+			String[] sMessageProtocol = null;
+			if (protocols.length > 2) {
+
+				for (int i = 0; i < roomClients.size(); i++)
+					if (roomClients.get(i).getClientName().equals(protocols[2])) {
+						_client = roomClients.get(i);
+					}
+
+				sMessageProtocol = protocols[1].split(" ");
+			}
+
+			if (_client != null && gameRoomMessageValidCheck(_client, sMessageProtocol)) {
+
+				sMessageProtocol[0] = sMessageProtocol[0].toLowerCase();
+
+				String query;
+
+				ResultSet rs;
+
+				if (sMessageProtocol[0].equals("-info")) {
+
+					query = "SELECT id,win,defeat,playtimes FROM " + sMessageProtocol[2] + " where id='"
+							+ sMessageProtocol[1] + "'";
+
+					try {
+						rs = stmt.executeQuery(query);
+					} catch (SQLException e) {
+						_client.sendPacket(Settings._ANSWER_ROOM_MEMEBER_MESSAGE + "", "Wrong command", "error");
+						return;
+					}
+					try {
+						if (rs.next()) {
+							String win = rs.getString("win");
+							String defeat = rs.getString("defeat");
+							String playtime = rs.getString("playtimes");
+
+							_client.sendPacket(Settings._ANSWER_ROOM_MEMEBER_MESSAGE + "",
+									"win:" + win + " " + "defeat:" + defeat + " " + "playtime:" + playtime,
+									sMessageProtocol[1] + " -info");
+
+							return;
+						}
+					} catch (SQLException e) {
+						_client.sendPacket(Settings._ANSWER_ROOM_MEMEBER_MESSAGE + "", "Wrong command", "error");
+						return;
+					}
+				} else if (sMessageProtocol[0].equals("-w")) {
+
+					String sSendingMessage = "";
+
+					for (int i = 2; i < sMessageProtocol.length; i++)
+						sSendingMessage += sMessageProtocol[i] + " ";
+
+					if (sSendingMessage == "")
+						return;
+
+					for (Client client : connections)
+						if (client.getClientName().equals(protocols[2])
+								|| client.getClientName().equals(sMessageProtocol[1])) {
+							client.sendPacket(Settings._ANSWER_ROOM_MEMEBER_MESSAGE + "", sSendingMessage,
+									protocols[2] + " -w");
+
+							client.sendPacket(Settings._ANSWER_WAITING_ROOM_SENDING_MESSAGE + "", sSendingMessage,
+									protocols[2] + " -w");
+						}
+					return;
+				}
+			}
+
+
 			for (int i = 0; i < roomClients.size(); i++)
 				if (roomClients.get(i).getsEnteredRoom().equals(getsRoomName())) {
-					roomClients.get(i).sendPacket(protocols);
+					if (!(Settings._ANSWER_ROOM_MEMEBER_MESSAGE == Integer.parseInt(protocols[0])
+							&& protocols[1].substring(0, 1).equals("-")))
+						roomClients.get(i).sendPacket(protocols);
 				}
 
 			if (Integer.parseInt(protocols[0]) == Settings._ANSWER_OUT_OF_THE_ROOM)
@@ -3479,6 +3639,22 @@ public class LoginController implements Initializable {
 					roomClients.get(i).setClientGameTag(Settings.ERRORCODE);
 					roomClients.get(i).init();
 				}
+		}
+
+		private boolean gameRoomMessageValidCheck(Client client, String[] sMessageProtocol) {
+
+			if (sMessageProtocol.length <= 2) {
+				return false;
+			}
+
+			for (int i = 0; i < connections.size(); i++)
+				if (connections.get(i).getClientName().equals(sMessageProtocol[1]))
+					return true;
+
+			client.sendPacket(Settings._ANSWER_ROOM_MEMEBER_MESSAGE + "",
+					sMessageProtocol[1] + " is not entered in server", "error");
+
+			return false;
 		}
 
 		/**

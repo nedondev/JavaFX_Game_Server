@@ -582,7 +582,7 @@ public class Settings {
     
     public static final String sSenderSplitProtocolToken = "/&";
     
-    public static final String sReceiverSplitProtocolToken = "/";
+    public static final String sReceiverSplitProtocolToken = "/&&";
     
     
     public static final String sSenderSplitMultipleToken = "@";
