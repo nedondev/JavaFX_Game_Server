@@ -10,6 +10,6 @@ you must follow below steps.
 
 2. set the password in logincontoller.
 
-3. build this server. (this server is optimized for https://github.com/jrcforever/JavaFX_Game_Client. so if you want to test this server. then I recommands you install the client.)
+3. build this server. (this server is optimized for https://github.com/jrcforever/JavaFX_Game_Client. so if you want to test this server. then I recommand you to install the client.)
 
-if you have a question or curious some thing. if so, dont hesitate to send to me a e-mail ( jrcright1004@gmail.com). thank you.
+if you have a question or curious some thing. if so, Don't hesitate to send to me a e-mail at jrcright1004@gmail.com. Thank you.
