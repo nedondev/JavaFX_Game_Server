@@ -196,6 +196,8 @@ public class LoginController implements Initializable {
 
 	private boolean isSudoIdDelete;
 
+	int _firstPoistion;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -388,8 +390,6 @@ public class LoginController implements Initializable {
 		};
 	}
 
-	int _firstPoistion;
-
 	public void handleBtnKeyEvent(KeyEvent e) {
 		switch (e.getCode()) {
 		case ENTER:
@@ -402,7 +402,7 @@ public class LoginController implements Initializable {
 		case UP:
 			if (nCommandIndicatorPoisition != nCommandsContainerIndicator
 					&& nCommandIndicatorPoisition > Settings.ERRORCODE)
-				serverTextEdit.setText(sCommandsContainer[nCommandIndicatorPoisition]);
+				setServerCommandTextEdit();
 
 			if (nCommandIndicatorPoisition != nCommandsContainerIndicator)
 				nCommandIndicatorPoisition--;
@@ -422,7 +422,7 @@ public class LoginController implements Initializable {
 
 			if (nCommandIndicatorPoisition != nCommandsContainerIndicator
 					&& nCommandIndicatorPoisition > Settings.ERRORCODE)
-				serverTextEdit.setText(sCommandsContainer[nCommandIndicatorPoisition]);
+				setServerCommandTextEdit();
 
 			break;
 
@@ -438,6 +438,12 @@ public class LoginController implements Initializable {
 		}
 	}
 
+	private void setServerCommandTextEdit() {
+		Platform.runLater(() -> serverTextEdit.setText(sCommandsContainer[nCommandIndicatorPoisition]));
+		Platform.runLater(() -> serverTextEdit.positionCaret(serverTextEdit.getLength()));
+
+	}
+
 	private Thread temp;
 
 	private void processCommand() {
@@ -451,7 +457,6 @@ public class LoginController implements Initializable {
 
 			if (nCommandsContainerIndicator >= Settings.nMaximumSizeOfCommandsContainer)
 				nCommandsContainerIndicator = Settings.ZEROINIT;
-
 		}
 
 		if (command.length() > 0) {
@@ -461,7 +466,7 @@ public class LoginController implements Initializable {
 
 			ResultSet rs;
 
-			serverTextEdit.clear();
+			Platform.runLater(() -> serverTextEdit.clear());
 
 			sCommandWords = parserOfCommandSyntax(command);
 
@@ -1107,7 +1112,8 @@ public class LoginController implements Initializable {
 		}
 
 		for (int i = 0; i < Settings.nMaximumCommandWordSize; i++) {
-			System.out.println(sCommandWords[i]);
+			if (sCommandWords[i] != " ")
+				System.out.println("execution command Queue[" + i + "] :" + sCommandWords[i]);
 		}
 
 		return sCommandWords;
@@ -3625,7 +3631,6 @@ public class LoginController implements Initializable {
 					return;
 				}
 			}
-
 
 			for (int i = 0; i < roomClients.size(); i++)
 				if (roomClients.get(i).getsEnteredRoom().equals(getsRoomName())) {

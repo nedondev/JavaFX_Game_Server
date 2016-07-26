@@ -558,7 +558,7 @@ public class Settings {
 
     public static final int nServerExitDefaultSeconds = 5;
 
-    public static final int nMaximumSizeOfCommandsContainer = 5;
+    public static final int nMaximumSizeOfCommandsContainer = 20;
 
     public static final int nMaximumCommandWordSize = 10;
 
