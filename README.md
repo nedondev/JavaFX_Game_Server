@@ -23,4 +23,6 @@ you must follow below steps.
 <br></br>
 ##Contact
 ---
-if you have a question or curious some thing. if so, Don't hesitate to send to me a e-mail at <jrcright1004@gmail.com>. Thank you.
+if you have a question or curious some thing. if so, Don't hesitate to send to me a e-mail at <jrcright1004@gmail.com>. 
+
+Thank you.
