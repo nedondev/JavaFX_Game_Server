@@ -2366,13 +2366,27 @@ public class LoginController implements Initializable {
 										}
 									break;
 
+								case Settings._REQUEST_PANGPANG_INIT_GAME_PLAY:
+									for (int i = 0; i < gameRooms.size(); i++)
+										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+
+											gameRooms.get(i).sendMessageInTheRoomPeople(
+													Settings._ANSWER_PANGPANG_INIT_GAME_PLAY + "", splitPacket[2],
+													rnd.nextInt(Settings.nGameAsteroidSceneWidth) + "",
+													Settings.nGameAsteroidSceneHeight
+															- Settings.nPangPangMainPlayerHeigh + "");
+											break;
+										}
+									break;
+
 								case Settings._REQUEST_METEORGAME_INIT_GAME_PLAY:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
 
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_METEORGAME_INIT_GAME_PLAY + "", splitPacket[2],
-													160.0 + "", 240.0 + "");
+													rnd.nextInt(Settings.nGameAsteroidSceneWidth) + "",
+													rnd.nextInt(Settings.nGameAsteroidSceneHeight) + "");
 											break;
 										}
 									break;
@@ -2382,6 +2396,17 @@ public class LoginController implements Initializable {
 										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_METEORGAME_REINIT_GAME_PLAY + "", splitPacket[2],
+													splitPacket[3], splitPacket[4], splitPacket[5]);
+											break;
+										}
+									writeOnTheBoard(protocol, splitPacket);
+									break;
+
+								case Settings._REQUEST_PANGPANG_REINIT_GAME_PLAY:
+									for (int i = 0; i < gameRooms.size(); i++)
+										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+											gameRooms.get(i).sendMessageInTheRoomPeople(
+													Settings._ANSWER_PANGPANG_REINIT_GAME_PLAY + "", splitPacket[2],
 													splitPacket[3], splitPacket[4], splitPacket[5]);
 											break;
 										}
@@ -2405,6 +2430,16 @@ public class LoginController implements Initializable {
 										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_METEORGAME_PLAYER_MOVING + "", splitPacket[2],
+													splitPacket[3], splitPacket[4]);
+											break;
+										}
+									break;
+									
+								case Settings._REQUEST_PANGPANG_PLAYER_MOVING:
+									for (int i = 0; i < gameRooms.size(); i++)
+										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+											gameRooms.get(i).sendMessageInTheRoomPeople(
+													Settings._ANSWER_PANGPANG_PLAYER_MOVING + "", splitPacket[2],
 													splitPacket[3], splitPacket[4]);
 											break;
 										}
@@ -3343,10 +3378,16 @@ public class LoginController implements Initializable {
 			setGameRunning(true);
 			if (Settings.nGameMeteorGame == getGameType())
 				initMeteorGameWhenConditionStart();
+			else if (Settings.nGamePangPang == getGameType())
+				initPangPangWhenConditionStart();
 			else
 				roomClients.get(playTokenPositionNumber).setPlayToken(true);
 
 			return true;
+		}
+		
+		public void initPangPangWhenConditionStart() {
+			sendMessageInTheRoomPeople(Settings._ANSWER_PANGPANG_PLAY_START + "", Boolean.toString(true));	
 		}
 
 		public void initMeteorGameWhenConditionStart() {
