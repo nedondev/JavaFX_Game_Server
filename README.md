@@ -15,7 +15,7 @@ you must follow below steps.
 >3. build this server. (this server is optimized for https://github.com/jrcforever/JavaFX_Game_Client. so if you want to test this server. then I recommand you to install the client.)
 
 <br></br>
-Movie
+Demo
 ---
 [![Demo CountPages alpha](https://j.gifs.com/VOqvNB.gif)](https://www.youtube.com/watch?v=FL4wDB9cNoI)
 
