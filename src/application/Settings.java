@@ -438,6 +438,16 @@ public class Settings {
 	 * Request METEORGAME STONE REINIT GAME PLAY 84
 	 */
 	public static final int _ANSWER_PANGPANG_PLAYER_MOVING = 0x00000054;
+	
+	/**
+	 * Request METEORGAME STONE REINIT GAME PLAY 85
+	 */
+	public static final int _REQUEST_METEORGAME_METEOR_PLAYER_SIZE_UP = 0x00000055;
+	
+	/**
+	 * Request METEORGAME STONE REINIT GAME PLAY 86
+	 */
+	public static final int _ANSWER_METEORGAME_METEOR_PLAYER_SIZE_UP = 0x00000056;
 
     // Asset Constant
 
@@ -603,6 +613,8 @@ public class Settings {
     public static final String sEncryptKey = "fe8025947de7cd71";
 
     public static int nReceiveBufferSize = 1000;
+    
+    public static final double fUpDoubleMeteorSize = 0.5f;
     
     public static final String DBName = "test";
     

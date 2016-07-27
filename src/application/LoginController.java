@@ -2434,7 +2434,7 @@ public class LoginController implements Initializable {
 											break;
 										}
 									break;
-									
+
 								case Settings._REQUEST_PANGPANG_PLAYER_MOVING:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
@@ -2476,6 +2476,20 @@ public class LoginController implements Initializable {
 									else
 										sendPacket(Settings._ANSWER_PC_CLIENT_VERSION_CHECK + "", false + "");
 
+									break;
+
+								case Settings._REQUEST_METEORGAME_METEOR_PLAYER_SIZE_UP:
+									for (int i = 0; i < gameRooms.size(); i++)
+										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+											gameRooms.get(i).sendMessageInTheRoomPeople(
+													Settings._ANSWER_METEORGAME_METEOR_PLAYER_SIZE_UP + "",
+													splitPacket[2],
+													Double.parseDouble(splitPacket[3]) + Settings.fUpDoubleMeteorSize
+															+ "",
+													Double.parseDouble(splitPacket[4]) + Settings.fUpDoubleMeteorSize
+															+ "");
+											break;
+										}
 									break;
 
 								/*
@@ -3385,9 +3399,9 @@ public class LoginController implements Initializable {
 
 			return true;
 		}
-		
+
 		public void initPangPangWhenConditionStart() {
-			sendMessageInTheRoomPeople(Settings._ANSWER_PANGPANG_PLAY_START + "", Boolean.toString(true));	
+			sendMessageInTheRoomPeople(Settings._ANSWER_PANGPANG_PLAY_START + "", Boolean.toString(true));
 		}
 
 		public void initMeteorGameWhenConditionStart() {
