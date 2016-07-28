@@ -32,11 +32,11 @@ Step contribution
 
 2.Make one or more commented and clean commits to the repository. or Make a new branch and you can be modifying more than one feature.
 
-3.Perform a pull request in github's web interface or source tree interface.
+3.Perform a pull request in github's web interface or sourcetree interface.
 
 <br></br>
 Contact
 ---
-if you have a question or curious some thing. if so, Don't hesitate to send to me a e-mail at <jrcright1004@gmail.com>. 
+if you have a question or curious something. if so, Don't hesitate to send to me a e-mail at <jrcright1004@gmail.com>. 
 
 Thank you.
