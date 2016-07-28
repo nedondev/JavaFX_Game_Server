@@ -252,7 +252,7 @@ public class LoginController implements Initializable {
 			Connection con = null;
 
 			// set the JDBC URL and connection id and password
-			con = DriverManager.getConnection("jdbc:mysql://localhost", "root", "-");
+			con = DriverManager.getConnection("jdbc:mysql://localhost", "root", "");
 
 			// Initialize the statements
 			stmt = null;
