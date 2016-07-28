@@ -2,6 +2,12 @@
 ####this project is made by j.r.c Jong Uk.
 ####this project's purpose is that service game server, or other server.
 <br></br>
+License
+---
+this project follow the rules stated by the [**MIT License**](https://en.wikipedia.org/wiki/MIT_License)
+
+
+<br></br>
 Using Step
 ---
 if you want to use this server.
@@ -18,6 +24,15 @@ you must follow below steps.
 Demo
 ---
 [![Demo CountPages alpha](https://j.gifs.com/0RN9BX.gif)](https://www.youtube.com/watch?v=FL4wDB9cNoI)
+
+<br></br>
+Step contribution
+---
+1.Fork project ["**JavaFx_Game_Server**"](https://github.com/jrcforever/JavaFX_Game_Server)
+
+2.Make one or more commented and clean commits to the repository. or Make a new branch and you can be modifying more than one feature.
+
+3.Perform a pull request in github's web interface or source tree interface.
 
 <br></br>
 Contact
