@@ -2055,6 +2055,10 @@ public class MainProtocolProcesser implements Initializable {
 
 								// request the client terminate event
 								case Settings._REQUEST_TERMINATE:
+
+									for (int i = 0; i < gameRooms.size(); i++)
+										if (gameRooms.get(i).getRoomClients().contains(Client.this))
+											gameRooms.get(i).exitTheRoom(Client.this);
 									AddQueryDataSet("R REQUESTTERMINATE", data.length());
 									String message1 = "[Client Terminate " + socket.getRemoteSocketAddress() + ": "
 											+ Thread.currentThread().getName() + "]";
@@ -3429,11 +3433,19 @@ public class MainProtocolProcesser implements Initializable {
 			spriteAnimationTimer = new AnimationTimer() {
 
 				Long lastNanoTime = new Long(System.nanoTime());
+				double stackTime;
 
 				public void handle(long currentNanoTime) {
 					// calculate time since last update.
 					double elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
 					lastNanoTime = currentNanoTime;
+
+					stackTime += elapsedTime;
+
+					if (stackTime > 0.4) {
+						System.out.println("testing");
+						stackTime = 0;
+					}
 				}
 			};
 
@@ -4426,6 +4438,10 @@ public class MainProtocolProcesser implements Initializable {
 		 */
 		public void setAITicTacToc(boolean isAITicTacToc) {
 			this.isAITicTacToc = isAITicTacToc;
+		}
+
+		public List<Client> getRoomClients() {
+			return roomClients;
 		}
 
 		/**
