@@ -252,7 +252,7 @@ public class LoginController implements Initializable {
 			Connection con = null;
 
 			// set the JDBC URL and connection id and password
-			con = DriverManager.getConnection("jdbc:mysql://localhost", "root", "");
+			con = DriverManager.getConnection("jdbc:mysql://localhost", "root", "-");
 
 			// Initialize the statements
 			stmt = null;
@@ -2410,7 +2410,6 @@ public class LoginController implements Initializable {
 													splitPacket[3], splitPacket[4], splitPacket[5]);
 											break;
 										}
-									writeOnTheBoard(protocol, splitPacket);
 									break;
 
 								case Settings._REQUEST_METEORGAME_OUT_OF_PLAYER:
@@ -2440,7 +2439,7 @@ public class LoginController implements Initializable {
 										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_PANGPANG_PLAYER_MOVING + "", splitPacket[2],
-													splitPacket[3], splitPacket[4]);
+													splitPacket[3], splitPacket[4],splitPacket[5]);
 											break;
 										}
 									break;
