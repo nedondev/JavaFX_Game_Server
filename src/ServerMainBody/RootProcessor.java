@@ -1,5 +1,5 @@
 
-package application;
+package ServerMainBody;
 
 import java.io.File;
 import java.net.URL;
@@ -27,7 +27,7 @@ import javafx.util.Duration;
  * @copyRight of KJW all Rights Reserved and follow the MIT license
  */
 
-public class RootController implements Initializable {
+public class RootProcessor implements Initializable {
 
     /**
      * start Server button

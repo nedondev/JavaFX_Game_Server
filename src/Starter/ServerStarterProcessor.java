@@ -1,5 +1,5 @@
 
-package application;
+package Starter;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import ServerMainBody.Settings;
 import Utility.EncryptionManager;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -22,7 +23,7 @@ import javafx.stage.WindowEvent;
  * @description this class Start The Application and Set The init State
  * @copyRight of KJW all Rights Reserved and follow the MIT license
  */
-public class AppMain extends Application {
+public class ServerStarterProcessor extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {

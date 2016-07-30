@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:id="login"
-	prefHeight="480" prefWidth="480" fx:controller="application.LoginController">
+	prefHeight="480" prefWidth="480" fx:controller="ServerMainBody.MainProtocolProcesser">
 	<top>
 		<BorderPane style="-fx-background-color: #eaeaea;">
 			<left>

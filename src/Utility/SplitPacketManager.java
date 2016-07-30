@@ -1,6 +1,6 @@
 package Utility;
 
-import application.Settings;
+import ServerMainBody.Settings;
 
 public class SplitPacketManager {
 	

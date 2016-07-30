@@ -6,7 +6,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Hex;
 
-import application.Settings;
+import ServerMainBody.Settings;
 
 public class EncryptionManager {
     public static String encrypt(String message) throws Exception {

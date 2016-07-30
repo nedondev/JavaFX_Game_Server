@@ -1,5 +1,5 @@
 
-package application;
+package ServerMainBody;
 
 import java.awt.AWTException;
 import java.awt.Robot;
@@ -50,6 +50,7 @@ import Information.ClientGameInformation;
 import PangPang.Map_Controler;
 import Utility.EncryptionManager;
 import Utility.SplitPacketManager;
+import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -92,7 +93,7 @@ import javafx.util.Duration;
  * @copyRight of KJW all Rights Reserved and follow the MIT license
  */
 
-public class LoginController implements Initializable {
+public class MainProtocolProcesser implements Initializable {
 	/**
 	 * this boardPane is the main borderPane
 	 */
@@ -143,9 +144,9 @@ public class LoginController implements Initializable {
 	/**
 	 * this variable for the Created Game room by client(Manager)
 	 */
-	private List<GameRoom> gameRooms = new Vector<LoginController.GameRoom>();
+	private List<GameRoom> gameRooms = new Vector<MainProtocolProcesser.GameRoom>();
 
-	private List<UniverseGame> universeGames = new Vector<LoginController.UniverseGame>();
+	private List<UniverseGame> universeGames = new Vector<MainProtocolProcesser.UniverseGame>();
 
 	/**
 	 * this variable for the listView(Clients)
@@ -2432,6 +2433,17 @@ public class LoginController implements Initializable {
 
 									break;
 
+								case Settings._REQUEST_PANGPANG_OUT_OF_PLAYER:
+
+									for (int i = 0; i < gameRooms.size(); i++)
+										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+
+											gameRooms.get(i).sendMessageInTheRoomPeople(
+													Settings._ANSWER_PANGPANG_OUT_OF_PLAYER + "", splitPacket[2]);
+											break;
+										}
+									break;
+
 								case Settings._REQUEST_METEORGAME_PLAYER_MOVING:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
@@ -3274,8 +3286,10 @@ public class LoginController implements Initializable {
 		private int nReceiveFinishEventCount;
 
 		private boolean isCheckMeteorGameCheckFinishOneTime;
-		
-		private Map_Controler mapControler; 
+
+		private Map_Controler mapControler;
+
+		private AnimationTimer spriteAnimationTimer;
 
 		public GameRoom(Client roomManager, String sRoomName, int nMaxmumClients, int nGameType) {
 			this.nReceiveFinishEventCount = Settings.ZEROINIT;
@@ -3317,7 +3331,7 @@ public class LoginController implements Initializable {
 					for (int j = 0; j < Settings.nCatchMeBlockHeight; j++) {
 						catchmeBoardStatues[i][j] = new CatchmeBoardStatues(Settings.ERRORCODE, Settings.ERRORCODE);
 					}
-			} else if ( getGameType() == Settings.nGamePangPang){
+			} else if (getGameType() == Settings.nGamePangPang) {
 				this.mapControler = new Map_Controler();
 			}
 		}
@@ -3412,6 +3426,19 @@ public class LoginController implements Initializable {
 		}
 
 		public void initPangPangWhenConditionStart() {
+			spriteAnimationTimer = new AnimationTimer() {
+
+				Long lastNanoTime = new Long(System.nanoTime());
+
+				public void handle(long currentNanoTime) {
+					// calculate time since last update.
+					double elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
+					lastNanoTime = currentNanoTime;
+				}
+			};
+
+			spriteAnimationTimer.start();
+
 			sendMessageInTheRoomPeople(Settings._ANSWER_PANGPANG_PLAY_START + "", Boolean.toString(true));
 		}
 
@@ -3486,6 +3513,8 @@ public class LoginController implements Initializable {
 					else if (getGameType() == Settings.nGameCatchMe)
 						setTheClientScoreAboutCatchmeReverse(manager.getClientGameTag());
 				sendMessageInTheRoomPeople(Settings._ANSWER_OUT_OF_THE_ROOM + "");
+				if (spriteAnimationTimer != null)
+					spriteAnimationTimer.stop();
 				return gameRooms.remove(GameRoom.this);
 			} else {
 				if (client.getsEnteredRoom().equals(getsRoomName())) {

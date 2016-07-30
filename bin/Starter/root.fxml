@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml" prefHeight="210"
-	prefWidth="210" fx:controller="application.RootController">
+	prefWidth="210" fx:controller="ServerMainBody.RootProcessor">
 	<children>
 		<BorderPane>
 			<top>

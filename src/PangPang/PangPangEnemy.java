@@ -2,8 +2,8 @@ package PangPang;
 
 import java.util.Random;
 
+import ServerMainBody.Settings;
 import Utility.Math_Vector;
-import application.Settings;
 
 public class PangPangEnemy {
 
