@@ -38,12 +38,11 @@ public class Map_Controler {
 	// Read map file
 	// -------------------------------------
 	public void readMap(int map_Number) {
-		map_Number--;
 		// stage map loading
 
 		InputStream map_file;
 		try {
-			map_file = new FileInputStream("src/Asset/JerryCoLogo.png");
+			map_file = new FileInputStream("src/Asset/stage0"+map_Number+".stg");
 			
 			try {
 				byte[] data = new byte[map_file.available()];

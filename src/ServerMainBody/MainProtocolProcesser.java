@@ -48,6 +48,7 @@ import GameUtilInformation.TicTacTocPoint;
 import Information.ClientAccessInformation;
 import Information.ClientGameInformation;
 import PangPang.Map_Controler;
+import PangPang.PangPangEnemy;
 import Utility.EncryptionManager;
 import Utility.SplitPacketManager;
 import javafx.animation.AnimationTimer;
@@ -3433,19 +3434,45 @@ public class MainProtocolProcesser implements Initializable {
 			spriteAnimationTimer = new AnimationTimer() {
 
 				Long lastNanoTime = new Long(System.nanoTime());
-				double stackTime;
+				PangPangEnemy mEnemy[][] = new PangPangEnemy[6][8];
+				Map_Controler mpCtr = new Map_Controler();
+				boolean isInitialization = false;
+				// init part
 
 				public void handle(long currentNanoTime) {
+
+					if (false == isInitialization) {
+						mpCtr.readMap(1);
+
+						for (int i = 0; i < 6; i++) {
+							for (int j = 0; j < 8; j++) {
+								mEnemy[i][j] = new PangPangEnemy(mpCtr);
+								mEnemy[i][j].MakeEnemy(i, j);
+							} // for i
+						} // for j
+						isInitialization = true;
+					}
+
 					// calculate time since last update.
 					double elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
 					lastNanoTime = currentNanoTime;
 
-					stackTime += elapsedTime;
+					String sendingPacket = "!!";
 
-					if (stackTime > 0.4) {
-						System.out.println("testing");
-						stackTime = 0;
-					}
+					for (int i = 0; i < 6; i++) {
+						for (int j = 0; j < 8; j++) {
+							mEnemy[i][j].update(elapsedTime);
+
+							sendingPacket += mEnemy[i][j].getPosition().x + ">!" + mEnemy[i][j].getPosition().y + "!!";
+
+							// System.out.println("[" + i + "][" + j + "]" + "
+							// :" + "x :" + mEnemy[i][j].getPosition().x
+							// + "y :" + mEnemy[i][j].getPosition().y);
+						} // for i
+					} // for j
+
+					sendMessageInTheRoomPeople(Settings._ANSWER_PANGPANG_ENEMY_EVENT + "", sendingPacket);
+
 				}
 			};
 

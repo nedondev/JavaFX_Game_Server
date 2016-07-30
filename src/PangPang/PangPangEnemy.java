@@ -45,6 +45,8 @@ public class PangPangEnemy {
 	public PangPangEnemy(Map_Controler paraMap_controler) {
 
 		this.map_controler = paraMap_controler;
+		this.velocity = new Math_Vector();
+		this.position = new Math_Vector();
 		// 내용 없음
 	}
 
@@ -88,7 +90,7 @@ public class PangPangEnemy {
 
 	}
 
-	public void update(float deltaTime) {
+	public void update(double deltaTime) {
 
 		Move();
 
@@ -351,6 +353,14 @@ public class PangPangEnemy {
 
 	public int get_Shield() {
 		return this.shield;
+	}
+
+	public Math_Vector getPosition() {
+		return position;
+	}
+
+	public void setPosition(Math_Vector position) {
+		this.position = position;
 	}
 
 	private void shoot_Missile(int dir) {
