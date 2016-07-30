@@ -43,6 +43,13 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import GameUtilInformation.CatchmeBoardStatues;
+import GameUtilInformation.TicTacTocPoint;
+import Information.ClientAccessInformation;
+import Information.ClientGameInformation;
+import PangPang.Map_Controler;
+import Utility.EncryptionManager;
+import Utility.SplitPacketManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -252,7 +259,8 @@ public class LoginController implements Initializable {
 			Connection con = null;
 
 			// set the JDBC URL and connection id and password
-			con = DriverManager.getConnection("jdbc:mysql://localhost", "root", "-");
+			con = DriverManager.getConnection(Settings.sDataBaseSystemUrl, Settings.sDatabaseSystemRoot,
+					Settings.sDatabaseSystemPassword);
 
 			// Initialize the statements
 			stmt = null;
@@ -2439,7 +2447,7 @@ public class LoginController implements Initializable {
 										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_PANGPANG_PLAYER_MOVING + "", splitPacket[2],
-													splitPacket[3], splitPacket[4],splitPacket[5]);
+													splitPacket[3], splitPacket[4], splitPacket[5]);
 											break;
 										}
 									break;
@@ -3266,6 +3274,8 @@ public class LoginController implements Initializable {
 		private int nReceiveFinishEventCount;
 
 		private boolean isCheckMeteorGameCheckFinishOneTime;
+		
+		private Map_Controler mapControler; 
 
 		public GameRoom(Client roomManager, String sRoomName, int nMaxmumClients, int nGameType) {
 			this.nReceiveFinishEventCount = Settings.ZEROINIT;
@@ -3307,6 +3317,8 @@ public class LoginController implements Initializable {
 					for (int j = 0; j < Settings.nCatchMeBlockHeight; j++) {
 						catchmeBoardStatues[i][j] = new CatchmeBoardStatues(Settings.ERRORCODE, Settings.ERRORCODE);
 					}
+			} else if ( getGameType() == Settings.nGamePangPang){
+				this.mapControler = new Map_Controler();
 			}
 		}
 

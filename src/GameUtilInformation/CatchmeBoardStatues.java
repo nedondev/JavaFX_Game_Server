@@ -1,5 +1,5 @@
 
-package application;
+package GameUtilInformation;
 
 /**
  * @author KJW finish at 2016/ 02/ 15

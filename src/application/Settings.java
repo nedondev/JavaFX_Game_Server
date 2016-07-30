@@ -640,4 +640,10 @@ public class Settings {
     public static final String sReceiverSplitMultipleToken = "@";
     
     public static final int nPangPangMainPlayerHeigh = 15;
+    
+    public static final String sDatabaseSystemPassword = "-";
+    
+    public static final String sDatabaseSystemRoot= "root";
+    
+    public static final String sDataBaseSystemUrl = "jdbc:mysql://localhost";
 }

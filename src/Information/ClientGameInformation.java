@@ -1,5 +1,5 @@
 
-package application;
+package Information;
 
 /**
  * @author KJW finish at 2016/ 02/ 15

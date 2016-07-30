@@ -1,10 +1,12 @@
 
-package application;
+package Utility;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Hex;
+
+import application.Settings;
 
 public class EncryptionManager {
     public static String encrypt(String message) throws Exception {
