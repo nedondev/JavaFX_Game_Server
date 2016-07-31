@@ -659,6 +659,10 @@ public class Settings {
 
     public static final String sReceiverSplitMultipleToken = "@";
     
+    public static final String sPangPangPositionInformationWordToken = "!!";
+    
+    public static final String sPangPangPositionCoordinationToken = ">!";
+    
     public static final int nPangPangMainPlayerHeigh = 15;
     
     public static final String sDatabaseSystemPassword = "1234";

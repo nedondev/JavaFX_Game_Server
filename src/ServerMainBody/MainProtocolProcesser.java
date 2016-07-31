@@ -3457,13 +3457,14 @@ public class MainProtocolProcesser implements Initializable {
 					double elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
 					lastNanoTime = currentNanoTime;
 
-					String sendingPacket = "!!";
+					String sendingPacket = Settings.sPangPangPositionInformationWordToken;
 
 					for (int i = 0; i < 6; i++) {
 						for (int j = 0; j < 8; j++) {
 							mEnemy[i][j].update(elapsedTime);
 
-							sendingPacket += mEnemy[i][j].getPosition().x + ">!" + mEnemy[i][j].getPosition().y + "!!";
+							sendingPacket += mEnemy[i][j].getPosition().x + Settings.sPangPangPositionCoordinationToken
+									+ mEnemy[i][j].getPosition().y + Settings.sPangPangPositionInformationWordToken;
 
 							// System.out.println("[" + i + "][" + j + "]" + "
 							// :" + "x :" + mEnemy[i][j].getPosition().x
