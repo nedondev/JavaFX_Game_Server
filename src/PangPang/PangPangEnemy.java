@@ -28,6 +28,8 @@ public class PangPangEnemy {
 	private int shield; // 보호막
 	private int status; // 상태
 
+	private String sUnitName;
+
 	private int sncX; // 싱크 위치로부터 떨어져 있는 거리
 	private SinglePath sPath; // 캐럭터가 이동할 Path 1줄 (입장 및 공격 루트)
 	private float sx, sy; // 캐릭터 이동 속도
@@ -53,9 +55,10 @@ public class PangPangEnemy {
 	// --------------------------------
 	// Sprite 만들기
 	// --------------------------------
-	public void MakeEnemy(int kind, int num) {
+	public void MakeEnemy(int kind, int num, int nName) {
 		sKind = kind;
 		sNum = num;
+		sUnitName = "bubble" + nName;
 
 		// 불필요한 캐릭터
 		if (this.map_controler.get_Selection(kind, num) == -1) {
@@ -361,6 +364,10 @@ public class PangPangEnemy {
 
 	public void setPosition(Math_Vector position) {
 		this.position = position;
+	}
+
+	public String getsUnitName() {
+		return sUnitName;
 	}
 
 	private void shoot_Missile(int dir) {

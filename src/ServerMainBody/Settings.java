@@ -463,6 +463,11 @@ public class Settings {
 	 * Request METEORGAME STONE REINIT GAME PLAY 89
 	 */
 	public static final int _ANSWER_PANGPANG_ENEMY_EVENT = 0x00000059;
+	/**
+	 * Request METEORGAME STONE REINIT GAME PLAY 90
+	 */
+	public static final int _ANSWER_PANGPANG_ENEMY_INIT = 0x0000005a;
+	
 
     // Asset Constant
 

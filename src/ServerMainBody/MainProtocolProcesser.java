@@ -47,10 +47,9 @@ import GameUtilInformation.CatchmeBoardStatues;
 import GameUtilInformation.TicTacTocPoint;
 import Information.ClientAccessInformation;
 import Information.ClientGameInformation;
+import PangPang.AttackEnemy;
 import PangPang.Map_Controler;
 import PangPang.PangPangEnemy;
-import PangPang.AttackEnemy;
-
 import Utility.EncryptionManager;
 import Utility.SplitPacketManager;
 import javafx.animation.AnimationTimer;
@@ -3446,16 +3445,27 @@ public class MainProtocolProcesser implements Initializable {
 
 					if (false == isInitialization) {
 						mpCtr.readMap(1);
-						
+
+						String sendingPacket = Settings.sPangPangPositionInformationWordToken;
+
 						for (int i = 0; i < Settings.nPangPangEnemyHeight; i++) {
 							for (int j = 0; j < Settings.nPangPangEnemyWidth; j++) {
 								mEnemy[i][j] = new PangPangEnemy(mpCtr);
-								mEnemy[i][j].MakeEnemy(i, j);
+								mEnemy[i][j].MakeEnemy(i, j, i * Settings.nPangPangEnemyWidth + j);
+
+								sendingPacket += mEnemy[i][j].getsUnitName()
+										+ Settings.sPangPangPositionCoordinationToken
+										+ mEnemy[i][j].get_Chracter_Number()
+										+ Settings.sPangPangPositionCoordinationToken
+										+ mEnemy[i][j].get_Is_Dead()
+										+ Settings.sPangPangPositionInformationWordToken;
+
 							} // for i
 						} // for j
-						
 
-						mAttack = new AttackEnemy(mpCtr,mEnemy);
+						sendMessageInTheRoomPeople(Settings._ANSWER_PANGPANG_ENEMY_INIT + "", sendingPacket);
+
+						mAttack = new AttackEnemy(mpCtr, mEnemy);
 						mAttack.ResetAttack();
 						isInitialization = true;
 					}
@@ -3470,13 +3480,16 @@ public class MainProtocolProcesser implements Initializable {
 						for (int j = 0; j < Settings.nPangPangEnemyWidth; j++) {
 							mEnemy[i][j].update(elapsedTime);
 
-							sendingPacket += mEnemy[i][j].getPosition().x + Settings.sPangPangPositionCoordinationToken
-									+ mEnemy[i][j].getPosition().y + Settings.sPangPangPositionInformationWordToken;
+							if (mEnemy[i][j].get_Is_Dead() == false)
+								sendingPacket += mEnemy[i][j].getsUnitName()
+										+ Settings.sPangPangPositionCoordinationToken + mEnemy[i][j].getPosition().x
+										+ Settings.sPangPangPositionCoordinationToken + mEnemy[i][j].getPosition().y
+										+ Settings.sPangPangPositionInformationWordToken;
 
 						} // for i
 					} // for j
 					mAttack.Attack();
-					
+
 					sendMessageInTheRoomPeople(Settings._ANSWER_PANGPANG_ENEMY_EVENT + "", sendingPacket);
 
 				}
