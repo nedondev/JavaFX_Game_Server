@@ -1,5 +1,7 @@
 package PangPang;
 
+import ServerMainBody.Settings;
+
 public class Position {
 	private int pos_X[][] = new int[6][8];
 	private int pos_Y[][] = new int[6][8];
@@ -24,8 +26,8 @@ public class Position {
 			} // for j
 		} // for i
 
-		int top = 130; // 적군 지면으로 부터 떨어진 거리 이미지 크기 20 * 20
-		int left = 155; // 적군 왼쪽 여백
+		int top = 105; // 적군 지면으로 부터 떨어진 거리 이미지 크기 20 * 20
+		int left = 90; // 적군 왼쪽 여백
 		int wid = 25; // 적군 상하 좌우 간격
 		int x;
 
@@ -34,7 +36,7 @@ public class Position {
 			if (i <= 1) {
 				for (int j = 0; j < 8; j++) {
 					pos_X[i][j] = j * wid + left;
-					pos_Y[i][j] = (6-i) * wid + top;
+					pos_Y[i][j] = Settings.nGameAsteroidSceneHeight - ((6-i) * wid + top);
 				} // for j
 			} else {
 				for (int j = 0; j < 8; j++) {
@@ -43,7 +45,7 @@ public class Position {
 					else
 						x = j / 2 + 4;
 					pos_X[i][j] = x * wid + left;
-					pos_Y[i][j] = (6-i) * wid + top;
+					pos_Y[i][j] = Settings.nGameAsteroidSceneHeight -((6-i) * wid + top);
 				}// for j
 			} // if
 		}// for i

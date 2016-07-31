@@ -49,6 +49,8 @@ import Information.ClientAccessInformation;
 import Information.ClientGameInformation;
 import PangPang.Map_Controler;
 import PangPang.PangPangEnemy;
+import PangPang.AttackEnemy;
+
 import Utility.EncryptionManager;
 import Utility.SplitPacketManager;
 import javafx.animation.AnimationTimer;
@@ -1039,10 +1041,10 @@ public class MainProtocolProcesser implements Initializable {
 		BufferedReader br;
 		try {
 			br = new BufferedReader(new FileReader(Settings.sServerInfo));
-			sSudoID = EncryptionManager.decrypt(br.readLine());
-			sSudoPassword = EncryptionManager.decrypt(br.readLine());
-			sEmailAddress = EncryptionManager.decrypt(br.readLine());
-			isMakeSudoId = Boolean.parseBoolean(EncryptionManager.decrypt(br.readLine()));
+			sSudoID = EncryptionManager.decrypt64bits(br.readLine());
+			sSudoPassword = EncryptionManager.decrypt64bits(br.readLine());
+			sEmailAddress = EncryptionManager.decrypt64bits(br.readLine());
+			isMakeSudoId = Boolean.parseBoolean(EncryptionManager.decrypt64bits(br.readLine()));
 			br.close();
 		}
 
@@ -1078,10 +1080,10 @@ public class MainProtocolProcesser implements Initializable {
 		PrintWriter pw;
 		try {
 			pw = new PrintWriter(Settings.sServerInfo);
-			pw.println(EncryptionManager.encrypt(sSudoID));
-			pw.println(EncryptionManager.encrypt(sSudoPassword));
-			pw.println(EncryptionManager.encrypt(sEmailAddress));
-			pw.println(EncryptionManager.encrypt(Boolean.toString(isMakeSudoId)));
+			pw.println(EncryptionManager.encrypt64bits(sSudoID));
+			pw.println(EncryptionManager.encrypt64bits(sSudoPassword));
+			pw.println(EncryptionManager.encrypt64bits(sEmailAddress));
+			pw.println(EncryptionManager.encrypt64bits(Boolean.toString(isMakeSudoId)));
 			pw.close();
 
 		} catch (FileNotFoundException e) {
@@ -1722,7 +1724,7 @@ public class MainProtocolProcesser implements Initializable {
 							String data = new String(byteArr, 0, readByteCount, "UTF-8");
 
 							String[] multiplePackets = SplitPacketManager
-									.splitMultiplePacket(EncryptionManager.decrypt(data));
+									.splitMultiplePacket(EncryptionManager.decrypt64bits(data));
 
 							for (int ik = 0; ik < multiplePackets.length; ik++) {
 
@@ -2729,7 +2731,7 @@ public class MainProtocolProcesser implements Initializable {
 				@Override
 				public void run() {
 					try {
-						byte[] byteArr = EncryptionManager.encrypt(data).getBytes("UTF-8");
+						byte[] byteArr = EncryptionManager.encrypt64bits(data).getBytes("UTF-8");
 						OutputStream outputStream = socket.getOutputStream();
 						outputStream.write(byteArr);
 						outputStream.flush();
@@ -3434,22 +3436,27 @@ public class MainProtocolProcesser implements Initializable {
 			spriteAnimationTimer = new AnimationTimer() {
 
 				Long lastNanoTime = new Long(System.nanoTime());
-				PangPangEnemy mEnemy[][] = new PangPangEnemy[6][8];
+				PangPangEnemy mEnemy[][] = new PangPangEnemy[Settings.nPangPangEnemyHeight][Settings.nPangPangEnemyWidth];
 				Map_Controler mpCtr = new Map_Controler();
 				boolean isInitialization = false;
+				AttackEnemy mAttack;
 				// init part
 
 				public void handle(long currentNanoTime) {
 
 					if (false == isInitialization) {
 						mpCtr.readMap(1);
-
-						for (int i = 0; i < 6; i++) {
-							for (int j = 0; j < 8; j++) {
+						
+						for (int i = 0; i < Settings.nPangPangEnemyHeight; i++) {
+							for (int j = 0; j < Settings.nPangPangEnemyWidth; j++) {
 								mEnemy[i][j] = new PangPangEnemy(mpCtr);
 								mEnemy[i][j].MakeEnemy(i, j);
 							} // for i
 						} // for j
+						
+
+						mAttack = new AttackEnemy(mpCtr,mEnemy);
+						mAttack.ResetAttack();
 						isInitialization = true;
 					}
 
@@ -3459,19 +3466,17 @@ public class MainProtocolProcesser implements Initializable {
 
 					String sendingPacket = Settings.sPangPangPositionInformationWordToken;
 
-					for (int i = 0; i < 6; i++) {
-						for (int j = 0; j < 8; j++) {
+					for (int i = 0; i < Settings.nPangPangEnemyHeight; i++) {
+						for (int j = 0; j < Settings.nPangPangEnemyWidth; j++) {
 							mEnemy[i][j].update(elapsedTime);
 
 							sendingPacket += mEnemy[i][j].getPosition().x + Settings.sPangPangPositionCoordinationToken
 									+ mEnemy[i][j].getPosition().y + Settings.sPangPangPositionInformationWordToken;
 
-							// System.out.println("[" + i + "][" + j + "]" + "
-							// :" + "x :" + mEnemy[i][j].getPosition().x
-							// + "y :" + mEnemy[i][j].getPosition().y);
 						} // for i
 					} // for j
-
+					mAttack.Attack();
+					
 					sendMessageInTheRoomPeople(Settings._ANSWER_PANGPANG_ENEMY_EVENT + "", sendingPacket);
 
 				}
@@ -3790,9 +3795,9 @@ public class MainProtocolProcesser implements Initializable {
 			for (int i = 0; i < connections.size(); i++)
 				if (connections.get(i).getClientName().equals(sMessageProtocol[1]))
 					return true;
-
-			client.sendPacket(Settings._ANSWER_ROOM_MEMEBER_MESSAGE + "",
-					sMessageProtocol[1] + " is not entered in server", "error");
+			if (!sMessageProtocol[1].equals("½ÃÀÛ"))
+				client.sendPacket(Settings._ANSWER_ROOM_MEMEBER_MESSAGE + "",
+						sMessageProtocol[1] + " is not entered in server", "error");
 
 			return false;
 		}

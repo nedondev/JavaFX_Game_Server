@@ -665,9 +665,13 @@ public class Settings {
     
     public static final int nPangPangMainPlayerHeigh = 15;
     
-    public static final String sDatabaseSystemPassword = "1234";
+    public static final String sDatabaseSystemPassword = "-";
     
     public static final String sDatabaseSystemRoot= "root";
     
     public static final String sDataBaseSystemUrl = "jdbc:mysql://localhost";
+    
+    public static final int nPangPangEnemyWidth = 8;
+    
+    public static final int nPangPangEnemyHeight = 6;
 }

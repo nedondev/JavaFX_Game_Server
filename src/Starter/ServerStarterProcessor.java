@@ -92,8 +92,8 @@ public class ServerStarterProcessor extends Application {
         PrintWriter pw;
         try {
             pw = new PrintWriter(Settings.sBuildingVersionFileName);
-            pw.println(EncryptionManager.encrypt(Settings.nBuildingTimes + ""));
-            pw.println(EncryptionManager.encrypt(Settings.clientVersion));
+            pw.println(EncryptionManager.encrypt64bits(Settings.nBuildingTimes + ""));
+            pw.println(EncryptionManager.encrypt64bits(Settings.clientVersion));
             pw.close();
         } catch (FileNotFoundException e) {
             System.out.println("serverinfo.jrc do not exist");
@@ -115,7 +115,7 @@ public class ServerStarterProcessor extends Application {
             temp = temp == null ? "0" : temp;
 
             if (!temp.equals("0"))
-                Settings.nBuildingTimes = Integer.parseInt(EncryptionManager.decrypt(temp));
+                Settings.nBuildingTimes = Integer.parseInt(EncryptionManager.decrypt64bits(temp));
             else
                 Settings.nBuildingTimes = Integer.parseInt("0");
             Settings.nBuildingTimes++;

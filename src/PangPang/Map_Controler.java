@@ -13,9 +13,9 @@ public class Map_Controler {
 			0.75f, 0.39f, 0f, -0.39f, -0.75f, -0.93f, -1f, -0.93f, -0.75f,
 			-0.39f };
 
-	private float dircetion_dis_Y[] = { 1f, 0.93f, 0.75f, 0.39f, 0f, -0.39f,
-			-0.75f, -0.93f, -1f, -0.93f, -0.75f, -0.39f, 0f, 0.39f, 0.75f,
-			0.93f };
+	private float dircetion_dis_Y[] = { -1f, -0.93f, -0.75f, -0.39f, -0f, +0.39f,
+			+0.75f, +0.93f, +1f, +0.93f, +0.75f, +0.39f, 0f, -0.39f, -0.75f,
+			-0.93f };
 
 	public int syncCnt = 0; // 싱크 계산용
 	public int dirLen = 75; // 전투 대형 유지 후 처음으로 이동할 거리
