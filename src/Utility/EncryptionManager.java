@@ -1,8 +1,10 @@
 
 package Utility;
 
+import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import javax.crypto.Cipher;
@@ -44,31 +46,63 @@ public class EncryptionManager {
 		return originalString;
 	}
 
-	private static Key generateKey64bits() throws Exception {
-		byte[] keyValue = Settings.keyStr.getBytes("UTF-8");
-		MessageDigest sha = MessageDigest.getInstance("SHA-1");
-		keyValue = sha.digest(keyValue);
-		keyValue = Arrays.copyOf(keyValue, 16); // use only first 128 bit
-		Key key = new SecretKeySpec(keyValue, Settings.ALGO);
-		return key;
+	private static Key generateKey64bits() {
+		byte[] keyValue = null;
+		MessageDigest sha = null;
+		try {
+			keyValue = Settings.keyStr.getBytes("UTF-8");
+			sha = MessageDigest.getInstance("SHA-1");
+			keyValue = sha.digest(keyValue);
+			keyValue = Arrays.copyOf(keyValue, 16); // use only first 128 bit
+			Key key = new SecretKeySpec(keyValue, Settings.ALGO);
+			return key;
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e);
+		}
+
+		return null;
 	}
 
-	public static String encrypt64bits(String Data) throws Exception {
-		Key key = generateKey64bits();
-		Cipher c = Cipher.getInstance(Settings.ALGO);
-		c.init(Cipher.ENCRYPT_MODE, key);
-		byte[] encVal = c.doFinal(Data.getBytes());
-		String encryptedValue = DatatypeConverter.printBase64Binary(encVal);
-		return encryptedValue;
+	public static String encrypt64bits(String Data) {
+		Key key;
+		Cipher c;
+		byte[] encVal = null;
+		try {
+			key = generateKey64bits();
+			c = Cipher.getInstance(Settings.ALGO);
+			c.init(Cipher.ENCRYPT_MODE, key);
+			encVal = c.doFinal(Data.getBytes());
+			String encryptedValue = DatatypeConverter.printBase64Binary(encVal);
+			return encryptedValue;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e);
+		}
+		return null;
 	}
 
-	public static String decrypt64bits(String encryptedData) throws Exception {
-		Key key = generateKey64bits();
-		Cipher c = Cipher.getInstance(Settings.ALGO);
-		c.init(Cipher.DECRYPT_MODE, key);
-		byte[] decordedValue = DatatypeConverter.parseBase64Binary(encryptedData);
-		byte[] decValue = c.doFinal(decordedValue);
-		String decryptedValue = new String(decValue);
-		return decryptedValue;
+	public static String decrypt64bits(String encryptedData) {
+		Key key;
+		Cipher c;
+		byte[] decValue = null;
+		try {
+			key = generateKey64bits();
+			c = Cipher.getInstance(Settings.ALGO);
+			c.init(Cipher.DECRYPT_MODE, key);
+			byte[] decordedValue = DatatypeConverter.parseBase64Binary(encryptedData);
+			decValue = c.doFinal(decordedValue);
+			String decryptedValue = new String(decValue);
+			return decryptedValue;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e);
+		}
+
+		return null;
+
 	}
 }

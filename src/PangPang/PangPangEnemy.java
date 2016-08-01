@@ -2,6 +2,9 @@ package PangPang;
 
 import java.util.Random;
 
+import com.mysql.fabric.xmlrpc.Client;
+
+import ServerMainBody.MainProtocolProcesser.GameRoom;
 import ServerMainBody.Settings;
 import Utility.Math_Vector;
 
@@ -24,6 +27,8 @@ public class PangPangEnemy {
 	public static final float ENEMY_WIDTH = 20f; // 캐릭터 width
 	public static final float ENEMY_HEIGHT = 20f; // 캐릭터 height
 
+	public static int Enemy_Missile_ID = 0;
+
 	private boolean isDead; // 전사자인가?
 	private int shield; // 보호막
 	private int status; // 상태
@@ -40,12 +45,14 @@ public class PangPangEnemy {
 	private int delay, dir, len; // 입장시 지연시간, 현재의 방향, 남은 거리
 	private int posX, posY; // 이동해야 할 목적지 좌표
 	private Random rnd = new Random();
+	private GameRoom mnt;
 
 	// --------------------------------
 	// 생성자
 	// --------------------------------
-	public PangPangEnemy(Map_Controler paraMap_controler) {
+	public PangPangEnemy(GameRoom mnt, Map_Controler paraMap_controler) {
 
+		this.mnt = mnt;
 		this.map_controler = paraMap_controler;
 		this.velocity = new Math_Vector();
 		this.position = new Math_Vector();
@@ -371,8 +378,11 @@ public class PangPangEnemy {
 	}
 
 	private void shoot_Missile(int dir) {
-		// if (rnd.nextInt(10) > diff[df])
-		// MainGame_Manager.mBubbleMis.add(new Bubble_Missile(this.position.x,
-		// this.position.y, dir));
+		if (rnd.nextInt(10) > 8) {
+			mnt.sendMessageInTheRoomPeople(Settings._ANSWER_PANGAPNG_ENEY_ATTACK + "", this.position.x + "",
+					this.position.y + "", dir + "", Settings.sPangPangEnemyName + Enemy_Missile_ID);
+			Enemy_Missile_ID++;
+		}
+
 	}
 }

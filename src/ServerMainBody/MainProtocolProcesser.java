@@ -14,6 +14,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
+import java.nio.channels.spi.AsynchronousChannelProvider;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -2465,7 +2466,7 @@ public class MainProtocolProcesser implements Initializable {
 										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_PANGPANG_PLAYER_MOVING + "", splitPacket[2],
-													splitPacket[3], splitPacket[4], splitPacket[5]);
+													splitPacket[3]);
 											break;
 										}
 									break;
@@ -2513,6 +2514,16 @@ public class MainProtocolProcesser implements Initializable {
 															+ "",
 													Double.parseDouble(splitPacket[4]) + Settings.fUpDoubleMeteorSize
 															+ "");
+											break;
+										}
+									break;
+
+								case Settings._REQUEST_PANGAPNG_ATTACK:
+									for (int i = 0; i < gameRooms.size(); i++)
+										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+											gameRooms.get(i).sendMessageInTheRoomPeople(
+													Settings._ANSWER_PANGAPNG_ATTACK + "", splitPacket[2],
+													splitPacket[3]);
 											break;
 										}
 									break;
@@ -3197,7 +3208,7 @@ public class MainProtocolProcesser implements Initializable {
 	 * 
 	 * @author KJW
 	 */
-	class GameRoom {
+	public class GameRoom {
 
 		/**
 		 * maximum connected client number
@@ -3295,13 +3306,18 @@ public class MainProtocolProcesser implements Initializable {
 
 		private Map_Controler mapControler;
 
-		private AnimationTimer spriteAnimationTimer;
+		// private AnimationTimer spriteAnimationTimer;
+
+		private Thread spriteAnimationThread;
+		private boolean isSpriteAnimationThread = true;
+
+		private GameRoom gameRoom;
 
 		public GameRoom(Client roomManager, String sRoomName, int nMaxmumClients, int nGameType) {
 			this.nReceiveFinishEventCount = Settings.ZEROINIT;
 			this.isCheckMeteorGameCheckFinishOneTime = true;
 			this.roomClients = new Vector<Client>();
-
+			this.gameRoom = this;
 			this.isAITicTacToc = false;
 			this.isGameRunning = false;
 			this.clientGameTag = Settings.ZEROINIT;
@@ -3432,70 +3448,78 @@ public class MainProtocolProcesser implements Initializable {
 		}
 
 		public void initPangPangWhenConditionStart() {
-			spriteAnimationTimer = new AnimationTimer() {
+			spriteAnimationThread = new Thread() {
 
 				Long lastNanoTime = new Long(System.nanoTime());
 				PangPangEnemy mEnemy[][] = new PangPangEnemy[Settings.nPangPangEnemyHeight][Settings.nPangPangEnemyWidth];
 				Map_Controler mpCtr = new Map_Controler();
 				boolean isInitialization = false;
 				AttackEnemy mAttack;
+				double stackedTime = 0;
 				// init part
 
-				public void handle(long currentNanoTime) {
+				public void run() {
+					while (isSpriteAnimationThread) {
+						if (false == isInitialization) {
+							mpCtr.readMap(1);
 
-					if (false == isInitialization) {
-						mpCtr.readMap(1);
+							String sendingPacket = Settings.sPangPangPositionInformationWordToken;
 
-						String sendingPacket = Settings.sPangPangPositionInformationWordToken;
+							for (int i = 0; i < Settings.nPangPangEnemyHeight; i++) {
+								for (int j = 0; j < Settings.nPangPangEnemyWidth; j++) {
+									mEnemy[i][j] = new PangPangEnemy(gameRoom, mpCtr);
+									mEnemy[i][j].MakeEnemy(i, j, i * Settings.nPangPangEnemyWidth + j);
 
-						for (int i = 0; i < Settings.nPangPangEnemyHeight; i++) {
-							for (int j = 0; j < Settings.nPangPangEnemyWidth; j++) {
-								mEnemy[i][j] = new PangPangEnemy(mpCtr);
-								mEnemy[i][j].MakeEnemy(i, j, i * Settings.nPangPangEnemyWidth + j);
+									sendingPacket += mEnemy[i][j].getsUnitName()
+											+ Settings.sPangPangPositionCoordinationToken
+											+ mEnemy[i][j].get_Chracter_Number()
+											+ Settings.sPangPangPositionCoordinationToken + mEnemy[i][j].get_Is_Dead()
+											+ Settings.sPangPangPositionInformationWordToken;
 
-								sendingPacket += mEnemy[i][j].getsUnitName()
-										+ Settings.sPangPangPositionCoordinationToken
-										+ mEnemy[i][j].get_Chracter_Number()
-										+ Settings.sPangPangPositionCoordinationToken
-										+ mEnemy[i][j].get_Is_Dead()
-										+ Settings.sPangPangPositionInformationWordToken;
+								} // for i
+							} // for j
 
-							} // for i
-						} // for j
+							sendMessageInTheRoomPeople(Settings._ANSWER_PANGPANG_ENEMY_INIT + "", sendingPacket);
 
-						sendMessageInTheRoomPeople(Settings._ANSWER_PANGPANG_ENEMY_INIT + "", sendingPacket);
+							mAttack = new AttackEnemy(mpCtr, mEnemy);
+							mAttack.ResetAttack();
+							isInitialization = true;
+						}
 
-						mAttack = new AttackEnemy(mpCtr, mEnemy);
-						mAttack.ResetAttack();
-						isInitialization = true;
+						long currentNanoTime = new Long(System.nanoTime());
+
+						// calculate time since last update.
+						double elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
+						lastNanoTime = currentNanoTime;
+						stackedTime += elapsedTime;
+						if (stackedTime > 0.02) {
+
+							String sendingPacket = Settings.sPangPangPositionInformationWordToken;
+
+							for (int i = 0; i < Settings.nPangPangEnemyHeight; i++) {
+								for (int j = 0; j < Settings.nPangPangEnemyWidth; j++) {
+									mEnemy[i][j].update(stackedTime);
+
+									if (mEnemy[i][j].get_Is_Dead() == false)
+										sendingPacket += mEnemy[i][j].getsUnitName()
+												+ Settings.sPangPangPositionCoordinationToken
+												+ mEnemy[i][j].getPosition().x
+												+ Settings.sPangPangPositionCoordinationToken
+												+ mEnemy[i][j].getPosition().y
+												+ Settings.sPangPangPositionInformationWordToken;
+
+								} // for i
+							} // for j
+							mAttack.Attack();
+
+							sendMessageInTheRoomPeople(Settings._ANSWER_PANGPANG_ENEMY_EVENT + "", sendingPacket);
+							stackedTime = 0;
+						}
 					}
-
-					// calculate time since last update.
-					double elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
-					lastNanoTime = currentNanoTime;
-
-					String sendingPacket = Settings.sPangPangPositionInformationWordToken;
-
-					for (int i = 0; i < Settings.nPangPangEnemyHeight; i++) {
-						for (int j = 0; j < Settings.nPangPangEnemyWidth; j++) {
-							mEnemy[i][j].update(elapsedTime);
-
-							if (mEnemy[i][j].get_Is_Dead() == false)
-								sendingPacket += mEnemy[i][j].getsUnitName()
-										+ Settings.sPangPangPositionCoordinationToken + mEnemy[i][j].getPosition().x
-										+ Settings.sPangPangPositionCoordinationToken + mEnemy[i][j].getPosition().y
-										+ Settings.sPangPangPositionInformationWordToken;
-
-						} // for i
-					} // for j
-					mAttack.Attack();
-
-					sendMessageInTheRoomPeople(Settings._ANSWER_PANGPANG_ENEMY_EVENT + "", sendingPacket);
-
 				}
 			};
 
-			spriteAnimationTimer.start();
+			spriteAnimationThread.start();
 
 			sendMessageInTheRoomPeople(Settings._ANSWER_PANGPANG_PLAY_START + "", Boolean.toString(true));
 		}
@@ -3571,8 +3595,10 @@ public class MainProtocolProcesser implements Initializable {
 					else if (getGameType() == Settings.nGameCatchMe)
 						setTheClientScoreAboutCatchmeReverse(manager.getClientGameTag());
 				sendMessageInTheRoomPeople(Settings._ANSWER_OUT_OF_THE_ROOM + "");
-				if (spriteAnimationTimer != null)
-					spriteAnimationTimer.stop();
+				if (spriteAnimationThread != null) {
+					isSpriteAnimationThread = false;
+					spriteAnimationThread.stop();
+				}
 				return gameRooms.remove(GameRoom.this);
 			} else {
 				if (client.getsEnteredRoom().equals(getsRoomName())) {
