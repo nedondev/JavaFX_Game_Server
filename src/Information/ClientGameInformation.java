@@ -9,124 +9,135 @@ package Information;
  */
 public class ClientGameInformation {
 
-    /**
-     * user's Statues Game Name
-     */
-    private String gameName;
+	/**
+	 * user's Statues Game Name
+	 */
+	private String gameName;
 
-    /**
-     * user's Game Play Times
-     */
-    private int playTimes;
+	/**
+	 * user's Game Play Times
+	 */
+	private int playTimes;
 
-    /**
-     * user's Game Win Number
-     */
-    private int win;
+	/**
+	 * user's Game Win Number
+	 */
+	private int win;
 
-    /**
-     * user's Game Defeat Number
-     */
-    private int defeat;
+	/**
+	 * user's Game Defeat Number
+	 */
+	private int defeat;
 
-    /**
-     * init The ClientGameInformation Using Game's Name
-     * 
-     * @param sGameName
-     */
-    public ClientGameInformation(String sGameName) {
-        super();
+	private int score;
 
-        this.gameName = sGameName;
-        this.playTimes = 0;
-        this.win = 0;
-        this.defeat = 0;
-    }
+	/**
+	 * init The ClientGameInformation Using Game's Name
+	 * 
+	 * @param sGameName
+	 */
+	public ClientGameInformation(String sGameName) {
+		super();
 
-    /**
-     * get the User PlayTimes Integer
-     * 
-     * @return
-     */
-    public int getPlayTimes() {
-        return playTimes;
-    }
+		this.gameName = sGameName;
+		this.playTimes = 0;
+		this.win = 0;
+		this.defeat = 0;
+		this.score = 0;
+	}
 
-    /**
-     * set The Number of The playTimes
-     * 
-     * @param playTimes
-     */
-    public void setPlayTimes(int playTimes) {
-        this.playTimes = playTimes;
-    }
+	/**
+	 * get the User PlayTimes Integer
+	 * 
+	 * @return
+	 */
+	public int getPlayTimes() {
+		return playTimes;
+	}
 
-    /**
-     * get the User win Integer
-     * 
-     * @return
-     */
-    public int getWin() {
-        return win;
-    }
+	/**
+	 * set The Number of The playTimes
+	 * 
+	 * @param playTimes
+	 */
+	public void setPlayTimes(int playTimes) {
+		this.playTimes = playTimes;
+	}
 
-    /**
-     * this function increase the number about win; (+1)
-     */
-    public void increaseWin() {
-        this.win++;
-    }
+	/**
+	 * get the User win Integer
+	 * 
+	 * @return
+	 */
+	public int getWin() {
+		return win;
+	}
 
-    /**
-     * set The Number of The win
-     * 
-     * @param win
-     */
-    public void setWin(int win) {
-        this.win = win;
-    }
+	/**
+	 * this function increase the number about win; (+1)
+	 */
+	public void increaseWin() {
+		this.win++;
+	}
 
-    /**
-     * get the User defeat Integer
-     * 
-     * @return
-     */
-    public int getDefeat() {
-        return defeat;
-    }
+	/**
+	 * set The Number of The win
+	 * 
+	 * @param win
+	 */
+	public void setWin(int win) {
+		this.win = win;
+	}
 
-    /**
-     * set The Number of The defeat
-     * 
-     * @param defeat
-     */
-    public void setDefeat(int defeat) {
-        this.defeat = defeat;
-    }
+	public int getScore() {
+		return score;
+	}
 
-    /**
-     * this function increase the number about defeat; (+1)
-     */
-    public void increaseDefeat() {
-        defeat++;
-    }
+	public void setScore(int score) {
+		this.score = score;
+	}
 
-    /**
-     * get the User game Name String
-     * 
-     * @return
-     */
-    public String getGameName() {
-        return gameName;
-    }
+	/**
+	 * get the User defeat Integer
+	 * 
+	 * @return
+	 */
+	public int getDefeat() {
+		return defeat;
+	}
 
-    /**
-     * set The User game Name
-     * 
-     * @param gameName
-     */
-    public void setGameName(String gameName) {
-        this.gameName = gameName;
-    }
+	/**
+	 * set The Number of The defeat
+	 * 
+	 * @param defeat
+	 */
+	public void setDefeat(int defeat) {
+		this.defeat = defeat;
+	}
+
+	/**
+	 * this function increase the number about defeat; (+1)
+	 */
+	public void increaseDefeat() {
+		defeat++;
+	}
+
+	/**
+	 * get the User game Name String
+	 * 
+	 * @return
+	 */
+	public String getGameName() {
+		return gameName;
+	}
+
+	/**
+	 * set The User game Name
+	 * 
+	 * @param gameName
+	 */
+	public void setGameName(String gameName) {
+		this.gameName = gameName;
+	}
 
 }

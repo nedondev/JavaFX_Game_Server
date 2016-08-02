@@ -14,7 +14,6 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
-import java.nio.channels.spi.AsynchronousChannelProvider;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -53,7 +52,6 @@ import PangPang.Map_Controler;
 import PangPang.PangPangEnemy;
 import Utility.EncryptionManager;
 import Utility.SplitPacketManager;
-import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -1604,6 +1602,8 @@ public class MainProtocolProcesser implements Initializable {
 
 		private ClientGameInformation meteor;
 
+		private ClientGameInformation pangPang;
+
 		/**
 		 * check the when the client is access or terminate the server
 		 */
@@ -1671,6 +1671,7 @@ public class MainProtocolProcesser implements Initializable {
 			this.ticTacToc = new ClientGameInformation(Settings.sGameStringStyleTicTacToc);
 			this.catchMe = new ClientGameInformation(Settings.sGameStringStyleCatchMe);
 			this.meteor = new ClientGameInformation(Settings.sGameStringStyleMeteorGame);
+			this.pangPang = new ClientGameInformation(Settings.sGameStringStylePangPang);
 			this.sEnteredRoom = null;
 			this.clientName = name;
 			this.socket = socket;
@@ -1970,6 +1971,16 @@ public class MainProtocolProcesser implements Initializable {
 										while (rs.next()) {
 											getMeteor().setWin(rs.getInt("win"));
 											getMeteor().setDefeat(rs.getInt("defeat"));
+										}
+
+										query = "SELECT win, defeat, score FROM pangpang where id ='" + splitPacket[1]
+												+ "'";
+										rs = stmt.executeQuery(query);
+
+										while (rs.next()) {
+											getPangPang().setWin(rs.getInt("win"));
+											getPangPang().setDefeat(rs.getInt("defeat"));
+											getPangPang().setScore(rs.getInt("score"));
 										}
 
 										writeOnTheBoard(protocol, splitPacket);
@@ -2528,6 +2539,31 @@ public class MainProtocolProcesser implements Initializable {
 										}
 									break;
 
+								case Settings._REQUEST_PANGAPNG_ENEMY_COLLISION_EVENT:
+									for (int i = 0; i < gameRooms.size(); i++)
+										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+											gameRooms.get(i).decreasePangPangEnemyLife(splitPacket[2]);
+											break;
+										}
+									break;
+
+								case Settings._REQUEST_PANGAPNG_FINISH:
+									for (int i = 0; i < gameRooms.size(); i++)
+										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+											if (gameRooms.get(i).getManager().getClientName().equals(splitPacket[2]))
+												gameRooms.get(i).setTheClientScoreAboutPangPangGameDefeat();
+											break;
+										}
+									break;
+
+								case Settings._REQUEST_PANGAPNG_FINISH_WIN:
+									for (int i = 0; i < gameRooms.size(); i++)
+										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1]))
+											gameRooms.get(i).setTheClientScoreAboutPangPangGameWin(splitPacket[2],
+													Integer.parseInt(splitPacket[3]));
+
+									break;
+
 								/*
 								 * check the protocol exist in the switch
 								 * statements
@@ -2587,6 +2623,10 @@ public class MainProtocolProcesser implements Initializable {
 					stmt.executeUpdate(query);
 
 					query = "INSERT INTO meteor VALUE ('" + splitPacket[1] + "'," + 0 + "," + 0 + "," + 0 + ")";
+					stmt.executeUpdate(query);
+
+					query = "INSERT INTO pangpang VALUE ('" + splitPacket[1] + "'," + 0 + "," + 0 + "," + 0 + "," + 0
+							+ ")";
 					stmt.executeUpdate(query);
 				}
 			};
@@ -3003,6 +3043,14 @@ public class MainProtocolProcesser implements Initializable {
 			this.catchMe = catchMe;
 		}
 
+		public ClientGameInformation getPangPang() {
+			return pangPang;
+		}
+
+		public void setPangPang(ClientGameInformation pangPang) {
+			this.pangPang = pangPang;
+		}
+
 		/**
 		 * get the room entered client
 		 * 
@@ -3311,6 +3359,8 @@ public class MainProtocolProcesser implements Initializable {
 		private Thread spriteAnimationThread;
 		private boolean isSpriteAnimationThread = true;
 
+		private PangPangEnemy mEnemy[][];
+
 		private GameRoom gameRoom;
 
 		public GameRoom(Client roomManager, String sRoomName, int nMaxmumClients, int nGameType) {
@@ -3354,6 +3404,7 @@ public class MainProtocolProcesser implements Initializable {
 						catchmeBoardStatues[i][j] = new CatchmeBoardStatues(Settings.ERRORCODE, Settings.ERRORCODE);
 					}
 			} else if (getGameType() == Settings.nGamePangPang) {
+				mEnemy = new PangPangEnemy[Settings.nPangPangEnemyHeight][Settings.nPangPangEnemyWidth];
 				this.mapControler = new Map_Controler();
 			}
 		}
@@ -3426,7 +3477,20 @@ public class MainProtocolProcesser implements Initializable {
 					client.getMeteor().setPlayTimes(client.getMeteor().getPlayTimes() + 1);
 
 					try {
-						query = "update meteor set playtimes =" + client.getTicTacToc().getPlayTimes() + " where id='"
+						query = "update meteor set playtimes =" + client.getMeteor().getPlayTimes() + " where id='"
+								+ client.getClientName() + "'";
+						stmt.executeUpdate(query);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			} else if (Settings.nGamePangPang == getGameType()) {
+				for (Client client : roomClients) {
+					String query;
+					client.getPangPang().setPlayTimes(client.getPangPang().getPlayTimes() + 1);
+					try {
+						query = "update pangpang set playtimes =" + client.getPangPang().getPlayTimes() + " where id='"
 								+ client.getClientName() + "'";
 						stmt.executeUpdate(query);
 					} catch (SQLException e) {
@@ -3451,7 +3515,6 @@ public class MainProtocolProcesser implements Initializable {
 			spriteAnimationThread = new Thread() {
 
 				Long lastNanoTime = new Long(System.nanoTime());
-				PangPangEnemy mEnemy[][] = new PangPangEnemy[Settings.nPangPangEnemyHeight][Settings.nPangPangEnemyWidth];
 				Map_Controler mpCtr = new Map_Controler();
 				boolean isInitialization = false;
 				AttackEnemy mAttack;
@@ -3500,6 +3563,7 @@ public class MainProtocolProcesser implements Initializable {
 								for (int j = 0; j < Settings.nPangPangEnemyWidth; j++) {
 									mEnemy[i][j].update(stackedTime);
 
+									// send enemy position information
 									if (mEnemy[i][j].get_Is_Dead() == false)
 										sendingPacket += mEnemy[i][j].getsUnitName()
 												+ Settings.sPangPangPositionCoordinationToken
@@ -3650,6 +3714,20 @@ public class MainProtocolProcesser implements Initializable {
 						: arg0.getnDestoryMeteor() < arg1.getnDestoryMeteor() ? 1 : 0;
 			}
 
+		}
+
+		public void decreasePangPangEnemyLife(String... protocols) {
+			for (int i = 0; i < Settings.nPangPangEnemyHeight; i++)
+				for (int j = 0; j < Settings.nPangPangEnemyWidth; j++)
+					if (mEnemy[i][j].getsUnitName().equals(protocols[0])) {
+						mEnemy[i][j].decreaseShield();
+
+						if (mEnemy[i][j].get_Is_Dead()) {
+							sendMessageInTheRoomPeople(Settings._ANSWER_PANGAPNG_ENEMY_COLLISION_EVENT + "",
+									protocols[0]);
+							break;
+						}
+					}
 		}
 
 		/**
@@ -4244,6 +4322,65 @@ public class MainProtocolProcesser implements Initializable {
 
 				setTheClientScoreAboutMeteorGame(packet[2]);
 			}
+		}
+
+		public void setTheClientScoreAboutPangPangGameWin(String sIdName, int score) {
+			ResultSet rs;
+			String query;
+			int nCompareScore = 0;
+
+			if (getManager().getClientName().equals(sIdName)) {
+				isSpriteAnimationThread = false;
+				setGameEnd(true);
+			}
+			for (int i = 0; i < roomClients.size(); i++) {
+				if (roomClients.get(i).getClientName().equals(sIdName)) {
+					roomClients.get(i).getPangPang().increaseWin();
+					try {
+						query = "update pangpang set win =" + roomClients.get(i).getPangPang().getWin() + " where id='"
+								+ sIdName + "'";
+						stmt.executeUpdate(query);
+
+						query = "SELECT score FROM pangpang where id='" + sIdName + "'";
+
+						rs = stmt.executeQuery(query);
+						while (rs.next()) {
+							nCompareScore = rs.getInt("score");
+						}
+
+						if (score >= nCompareScore) {
+							query = "update pangpang set score =" + score + " where id='" + sIdName + "'";
+							stmt.executeUpdate(query);
+						}
+
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+
+		}
+
+		public void setTheClientScoreAboutPangPangGameDefeat() {
+
+			String query;
+
+			isSpriteAnimationThread = false;
+			setGameEnd(true);
+
+			for (int i = 0; i < roomClients.size(); i++) {
+				roomClients.get(i).getPangPang().increaseDefeat();
+				try {
+					query = "update pangpang set defeat =" + roomClients.get(i).getPangPang().getDefeat()
+							+ " where id='" + roomClients.get(i).getClientName() + "'";
+					stmt.executeUpdate(query);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
 		}
 
 		private void setTheClientScoreAboutMeteorGame(String sWinnerId) {

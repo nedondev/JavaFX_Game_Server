@@ -365,6 +365,13 @@ public class PangPangEnemy {
 		return this.shield;
 	}
 
+	public void decreaseShield() {
+		this.shield--;
+
+		if (shield <= 0)
+			this.isDead = true;
+	}
+
 	public Math_Vector getPosition() {
 		return position;
 	}
