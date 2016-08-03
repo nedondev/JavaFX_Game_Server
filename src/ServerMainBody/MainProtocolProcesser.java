@@ -207,6 +207,8 @@ public class MainProtocolProcesser implements Initializable {
 
 	int _firstPoistion;
 
+	private long nTotalRoomNumber;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -216,6 +218,7 @@ public class MainProtocolProcesser implements Initializable {
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		nTotalRoomNumber = 0;
 		isSudodeleteEventOccured = false;
 		isSudoIdDelete = false;
 		sCommandsContainer = new String[Settings.nMaximumSizeOfCommandsContainer];
@@ -1766,7 +1769,7 @@ public class MainProtocolProcesser implements Initializable {
 									boolean _check = true;
 
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (0 == gameRooms.get(i).getsRoomName().compareTo(splitPacket[1])) {
+										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
 											sendPacket(Settings._ANSWER_THE_ROOM_IS_EXIST + "");
 											AddQueryDataSet("S ANSWERTHEROOMISEXIST", 2);
 											_check = false;
@@ -1777,11 +1780,13 @@ public class MainProtocolProcesser implements Initializable {
 									if (_check == true) {
 										Client.this.setsEnteredRoom(splitPacket[1]);
 										gameRooms.add(new GameRoom(Client.this, splitPacket[1],
-												Integer.parseInt(splitPacket[2]), Integer.parseInt(splitPacket[3])));
+												Integer.parseInt(splitPacket[2]), Integer.parseInt(splitPacket[3]),
+												nTotalRoomNumber));
 										writeOnTheBoard(protocol, splitPacket);
 
 										sendPacket(Settings._ANSWER_THE_ROOM_MAKE_SUCCESS + "", splitPacket[1],
-												splitPacket[2], splitPacket[3], getClientName());
+												splitPacket[2], splitPacket[3], getClientName(), nTotalRoomNumber + "");
+										nTotalRoomNumber++;
 										AddQueryDataSet("S ANSWERTHEROOMMAKESUCCESS", splitPacket[1].length()
 												+ splitPacket[2].length() + splitPacket[3].length());
 									}
@@ -1904,7 +1909,7 @@ public class MainProtocolProcesser implements Initializable {
 								case Settings._REQUEST_ROOM_MEMEBER_MESSAGE:
 									AddQueryDataSet("R REQUESTROOMMEMEBERMESSAGE", data.length());
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[2])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[2])) {
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_ROOM_MEMEBER_MESSAGE + "", splitPacket[1],
 													Client.this.getClientName());
@@ -2016,7 +2021,8 @@ public class MainProtocolProcesser implements Initializable {
 																gameRooms.get(i).getsRoomName(),
 																gameRooms.get(i).getnMaxmumClients() + "",
 																gameRooms.get(i).getGameType() + "",
-																gameRooms.get(i).getManager().getClientName());
+																gameRooms.get(i).getManager().getClientName(),
+																gameRooms.get(i).getnInitRoomNumber() + "");
 														AddQueryDataSet("S ANSWERGUESTENTERTHEROOMSUCCESS",
 																gameRooms.get(i).getsRoomName().length()
 																		+ gameRooms.get(i).getnMaxmumClients()
@@ -2105,7 +2111,7 @@ public class MainProtocolProcesser implements Initializable {
 								case Settings._REQUEST_NEW_ROOM_MEMEBER_NOTIFICATION:
 									AddQueryDataSet("R REQUESTNEWROOMMEMEBERNOTIFICATION", data.length());
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_NEW_ROOM_MEMEBER_NOTIFICATION + "",
 													Client.this.getClientName());
@@ -2124,7 +2130,7 @@ public class MainProtocolProcesser implements Initializable {
 								case Settings._REQUEST_START_THE_GAME:
 									AddQueryDataSet("R REQUESTSTARTTHEGAME", data.length());
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[2])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[2])) {
 											if (gameRooms.get(i).startTheRoomGame(splitPacket[1],
 													Boolean.parseBoolean(splitPacket[3]))) {
 
@@ -2154,7 +2160,7 @@ public class MainProtocolProcesser implements Initializable {
 
 									String _meassage;
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 											if (Settings.isGamePrepareStart == Boolean.parseBoolean(splitPacket[2]))
 												_meassage = "게임 시작 준비를 완료하였습니다.";
 											else
@@ -2176,7 +2182,7 @@ public class MainProtocolProcesser implements Initializable {
 								 */
 								case Settings._REQUEST_CATCHME_STONE_EVENT:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 
 											int _itemNumber = rnd.nextInt(4);
 											int _choice = rnd.nextInt(2);
@@ -2230,7 +2236,7 @@ public class MainProtocolProcesser implements Initializable {
 									AddQueryDataSet("R REQUESTTICTACTOCSTONEEVENT", data.length());
 
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 											if (Settings.ERRORCODE == gameRooms.get(i)
 													.getTictactocBoardStatues()[Integer.parseInt(
 															splitPacket[2])][Integer.parseInt(splitPacket[3])]) {
@@ -2256,7 +2262,7 @@ public class MainProtocolProcesser implements Initializable {
 									AddQueryDataSet("R REQUESTTICTACTOCTURNPLAYERNAME", data.length());
 
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_TICTACTOC_TURN_PLAYER_NAME + "",
 													gameRooms.get(i).getTurnClientName());
@@ -2384,7 +2390,7 @@ public class MainProtocolProcesser implements Initializable {
 
 								case Settings._REQUEST_METEORGAME_SET_CLIECK_EVENT:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_METEORGAME_SET_CLIECK_EVENT + "", getClientName(),
@@ -2395,7 +2401,7 @@ public class MainProtocolProcesser implements Initializable {
 
 								case Settings._REQUEST_PANGPANG_INIT_GAME_PLAY:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_PANGPANG_INIT_GAME_PLAY + "", splitPacket[2],
@@ -2408,7 +2414,7 @@ public class MainProtocolProcesser implements Initializable {
 
 								case Settings._REQUEST_METEORGAME_INIT_GAME_PLAY:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_METEORGAME_INIT_GAME_PLAY + "", splitPacket[2],
@@ -2420,7 +2426,7 @@ public class MainProtocolProcesser implements Initializable {
 
 								case Settings._REQUEST_METEORGAME_REINIT_GAME_PLAY:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_METEORGAME_REINIT_GAME_PLAY + "", splitPacket[2],
 													splitPacket[3], splitPacket[4], splitPacket[5]);
@@ -2431,7 +2437,7 @@ public class MainProtocolProcesser implements Initializable {
 
 								case Settings._REQUEST_PANGPANG_REINIT_GAME_PLAY:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_PANGPANG_REINIT_GAME_PLAY + "", splitPacket[2],
 													splitPacket[3], splitPacket[4], splitPacket[5]);
@@ -2441,7 +2447,7 @@ public class MainProtocolProcesser implements Initializable {
 
 								case Settings._REQUEST_METEORGAME_OUT_OF_PLAYER:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_METEORGAME_OUT_OF_PLAYER + "", splitPacket[2]);
@@ -2454,7 +2460,7 @@ public class MainProtocolProcesser implements Initializable {
 								case Settings._REQUEST_PANGPANG_OUT_OF_PLAYER:
 
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_PANGPANG_OUT_OF_PLAYER + "", splitPacket[2]);
@@ -2464,7 +2470,7 @@ public class MainProtocolProcesser implements Initializable {
 
 								case Settings._REQUEST_METEORGAME_PLAYER_MOVING:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_METEORGAME_PLAYER_MOVING + "", splitPacket[2],
 													splitPacket[3], splitPacket[4]);
@@ -2474,7 +2480,7 @@ public class MainProtocolProcesser implements Initializable {
 
 								case Settings._REQUEST_PANGPANG_PLAYER_MOVING:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_PANGPANG_PLAYER_MOVING + "", splitPacket[2],
 													splitPacket[3]);
@@ -2484,7 +2490,7 @@ public class MainProtocolProcesser implements Initializable {
 
 								case Settings._REQUEST_METEORGAME_METEOR_DELETE:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 											String winner;
 
 											winner = gameRooms.get(i).setTheMeteriorDestroyClientScore(splitPacket[2]);
@@ -2497,7 +2503,7 @@ public class MainProtocolProcesser implements Initializable {
 
 								case Settings._REQUEST_METEORGAME_METEOR_GAME_FINISH:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 											gameRooms.get(i).checkTheMeteorGameFinishCondition(splitPacket);
 											break;
 										}
@@ -2517,7 +2523,7 @@ public class MainProtocolProcesser implements Initializable {
 
 								case Settings._REQUEST_METEORGAME_METEOR_PLAYER_SIZE_UP:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_METEORGAME_METEOR_PLAYER_SIZE_UP + "",
 													splitPacket[2],
@@ -2531,7 +2537,7 @@ public class MainProtocolProcesser implements Initializable {
 
 								case Settings._REQUEST_PANGAPNG_ATTACK:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_PANGAPNG_ATTACK + "", splitPacket[2],
 													splitPacket[3]);
@@ -2541,7 +2547,7 @@ public class MainProtocolProcesser implements Initializable {
 
 								case Settings._REQUEST_PANGAPNG_ENEMY_COLLISION_EVENT:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 											gameRooms.get(i).decreasePangPangEnemyLife(splitPacket[2]);
 											break;
 										}
@@ -2549,7 +2555,7 @@ public class MainProtocolProcesser implements Initializable {
 
 								case Settings._REQUEST_PANGAPNG_FINISH:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1])) {
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 											if (gameRooms.get(i).getManager().getClientName().equals(splitPacket[2]))
 												gameRooms.get(i).setTheClientScoreAboutPangPangGameDefeat();
 											break;
@@ -2558,7 +2564,7 @@ public class MainProtocolProcesser implements Initializable {
 
 								case Settings._REQUEST_PANGAPNG_FINISH_WIN:
 									for (int i = 0; i < gameRooms.size(); i++)
-										if (gameRooms.get(i).getsRoomName().equals(splitPacket[1]))
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1]))
 											gameRooms.get(i).setTheClientScoreAboutPangPangGameWin(splitPacket[2],
 													Integer.parseInt(splitPacket[3]));
 
@@ -3352,8 +3358,6 @@ public class MainProtocolProcesser implements Initializable {
 
 		private boolean isCheckMeteorGameCheckFinishOneTime;
 
-		private Map_Controler mapControler;
-
 		// private AnimationTimer spriteAnimationTimer;
 
 		private Thread spriteAnimationThread;
@@ -3363,7 +3367,12 @@ public class MainProtocolProcesser implements Initializable {
 
 		private GameRoom gameRoom;
 
-		public GameRoom(Client roomManager, String sRoomName, int nMaxmumClients, int nGameType) {
+		private long nInitRoomNumber;
+
+		Map_Controler mpCtr;
+
+		public GameRoom(Client roomManager, String sRoomName, int nMaxmumClients, int nGameType, long nRoomNumber) {
+			this.nInitRoomNumber = nRoomNumber;
 			this.nReceiveFinishEventCount = Settings.ZEROINIT;
 			this.isCheckMeteorGameCheckFinishOneTime = true;
 			this.roomClients = new Vector<Client>();
@@ -3405,7 +3414,7 @@ public class MainProtocolProcesser implements Initializable {
 					}
 			} else if (getGameType() == Settings.nGamePangPang) {
 				mEnemy = new PangPangEnemy[Settings.nPangPangEnemyHeight][Settings.nPangPangEnemyWidth];
-				this.mapControler = new Map_Controler();
+
 			}
 		}
 
@@ -3515,7 +3524,6 @@ public class MainProtocolProcesser implements Initializable {
 			spriteAnimationThread = new Thread() {
 
 				Long lastNanoTime = new Long(System.nanoTime());
-				Map_Controler mpCtr = new Map_Controler();
 				boolean isInitialization = false;
 				AttackEnemy mAttack;
 				double stackedTime = 0;
@@ -3524,6 +3532,8 @@ public class MainProtocolProcesser implements Initializable {
 				public void run() {
 					while (isSpriteAnimationThread) {
 						if (false == isInitialization) {
+
+							mpCtr = new Map_Controler();
 							mpCtr.readMap(1);
 
 							String sendingPacket = Settings.sPangPangPositionInformationWordToken;
@@ -3725,6 +3735,7 @@ public class MainProtocolProcesser implements Initializable {
 						if (mEnemy[i][j].get_Is_Dead()) {
 							sendMessageInTheRoomPeople(Settings._ANSWER_PANGAPNG_ENEMY_COLLISION_EVENT + "",
 									protocols[0]);
+							mpCtr.set_Enemy_Cnt_Minus();
 							break;
 						}
 					}
@@ -4770,6 +4781,10 @@ public class MainProtocolProcesser implements Initializable {
 				e.printStackTrace();
 			}
 
+		}
+
+		public long getnInitRoomNumber() {
+			return nInitRoomNumber;
 		}
 
 		/**
