@@ -2316,11 +2316,11 @@ public class MainProtocolProcesser implements Initializable {
 								 * if client request new CatchMe Selected Item
 								 * request this protocol processing this event
 								 */
-								case Settings._REQUEST_CATCHM_ESELECT_ITEM:
+								case Settings._REQUEST_CATCHME_SELECT_ITEM:
 									int _itemNumber = rnd.nextInt(4);
 
 									setnPreviousItemNumber(_itemNumber);
-									sendPacket(Settings._ANSWER_CATCHM_ESELECT_ITEM + "", _itemNumber + "");
+									sendPacket(Settings._ANSWER_CATCHME_SELECT_ITEM + "", _itemNumber + "");
 									break;
 
 								// client request the game server login on

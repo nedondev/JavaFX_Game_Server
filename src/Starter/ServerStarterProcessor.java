@@ -89,6 +89,9 @@ public class ServerStarterProcessor extends Application {
 		launch(args);
 	}
 
+	/**
+	 * save the build time information into serverinfo.jrc using encrypt 64 bits
+	 */
 	private void fileSetBuildingTime() {
 		PrintWriter pw;
 		try {
@@ -105,6 +108,9 @@ public class ServerStarterProcessor extends Application {
 
 	}
 
+	/**
+	 * read the build time information into serverinfo.jrc using decrypt 64bits
+	 */
 	private void BuildingTimeReadFile() {
 		BufferedReader br;
 		try {

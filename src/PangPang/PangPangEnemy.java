@@ -386,7 +386,7 @@ public class PangPangEnemy {
 
 	private void shoot_Missile(int dir) {
 		if (rnd.nextInt(10) > 8) {
-			mnt.sendMessageInTheRoomPeople(Settings._ANSWER_PANGAPNG_ENEY_ATTACK + "", this.position.x + "",
+			mnt.sendMessageInTheRoomPeople(Settings._ANSWER_PANGAPNG_ENEMY_ATTACK + "", this.position.x + "",
 					this.position.y + "", dir + "", Settings.sPangPangEnemyName + Enemy_Missile_ID);
 			Enemy_Missile_ID++;
 		}
