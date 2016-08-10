@@ -402,7 +402,7 @@ public class Settings {
 	 * Answer PC-Client Version check event 77
 	 */
 	public static final int _ANSWER_PC_CLIENT_VERSION_CHECK = 0x0000004d;
-	
+
 	/**
 	 * Request PANGPANG Game init event 78
 	 */
@@ -412,7 +412,7 @@ public class Settings {
 	 * Answer PANGAPNG Game init event 79
 	 */
 	public static final int _ANSWER_PANGPANG_INIT_GAME_PLAY = 0x0000004f;
-	
+
 	/**
 	 * Request PANGAPNG Game reinit event 80
 	 */
@@ -422,12 +422,12 @@ public class Settings {
 	 * Answer PANGAPNG Game reinit event 81
 	 */
 	public static final int _ANSWER_PANGPANG_REINIT_GAME_PLAY = 0x00000051;
-	
-    /**
-     * Answer PANGAPNG Game start 82
-     */
-    public static final int _ANSWER_PANGPANG_PLAY_START = 0x00000052;
-    
+
+	/**
+	 * Answer PANGAPNG Game start 82
+	 */
+	public static final int _ANSWER_PANGPANG_PLAY_START = 0x00000052;
+
 	/**
 	 * Request PANGAPNG Game player moving event 83
 	 */
@@ -442,22 +442,22 @@ public class Settings {
 	 * Request METEORGAME player size UP 85
 	 */
 	public static final int _REQUEST_METEORGAME_METEOR_PLAYER_SIZE_UP = 0x00000055;
-	
+
 	/**
 	 * Answer METEORGAME player size up 86
 	 */
 	public static final int _ANSWER_METEORGAME_METEOR_PLAYER_SIZE_UP = 0x00000056;
-	
+
 	/**
 	 * Request PANGAPNG out of the room 87
 	 */
 	public static final int _REQUEST_PANGPANG_OUT_OF_PLAYER = 0x00000057;
-	
+
 	/**
 	 * Answer PANGPANG out of the room 88
 	 */
 	public static final int _ANSWER_PANGPANG_OUT_OF_PLAYER = 0x00000058;
-	
+
 	/**
 	 * Answer PANGAPNG Enemy information event 89
 	 */
@@ -466,7 +466,7 @@ public class Settings {
 	 * Answer PANGAPNG Enemy init event 90
 	 */
 	public static final int _ANSWER_PANGPANG_ENEMY_INIT = 0x0000005a;
-	
+
 	/**
 	 * Answer PANGAPNG Enemy Attack event 91
 	 */
@@ -476,31 +476,42 @@ public class Settings {
 	 * Request PANGAPNG player Attack event 92
 	 */
 	public static final int _REQUEST_PANGAPNG_ATTACK = 0x0000005c;
-	
+
 	/**
 	 * Answer PangPang player Attack event 93
 	 */
 	public static final int _ANSWER_PANGAPNG_ATTACK = 0x0000005d;
-	
+
 	/**
 	 * Request PangPang Enemy Collision event 94
 	 */
 	public static final int _REQUEST_PANGAPNG_ENEMY_COLLISION_EVENT = 0x0000005e;
-	
+
 	/**
 	 * Answer PangPang Enemy Collision event 95
 	 */
 	public static final int _ANSWER_PANGAPNG_ENEMY_COLLISION_EVENT = 0x0000005f;
-	
+
 	/**
 	 * Request PangPang Game finish defeat 96
 	 */
 	public static final int _REQUEST_PANGAPNG_FINISH = 0x00000060;
-	
+
 	/**
 	 * Request PangPang game finish win 97
 	 */
 	public static final int _REQUEST_PANGAPNG_FINISH_WIN = 0x00000061;
+
+	/**
+	 * Request PangPang Player Death 98
+	 */
+	public static final int _REQUEST_PANGAPNG_PLAYER_DEATH = 0x00000062;
+
+	/**
+	 * Answer PangPang Player Death 99
+	 */
+	public static final int _ANSWER_PANGAPNG_PLAYER_DEATH = 0x00000062;
+
 	// Asset Constant
 
 	/**

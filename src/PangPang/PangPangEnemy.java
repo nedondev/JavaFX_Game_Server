@@ -1,5 +1,6 @@
 package PangPang;
 
+import java.text.DecimalFormat;
 import java.util.Random;
 
 import com.mysql.fabric.xmlrpc.Client;
@@ -385,9 +386,11 @@ public class PangPangEnemy {
 	}
 
 	private void shoot_Missile(int dir) {
+		DecimalFormat df = new DecimalFormat("#.##");
+
 		if (rnd.nextInt(10) > 8) {
-			mnt.sendMessageInTheRoomPeople(Settings._ANSWER_PANGAPNG_ENEMY_ATTACK + "", this.position.x + "",
-					this.position.y + "", dir + "", Settings.sPangPangEnemyName + Enemy_Missile_ID);
+			mnt.sendMessageInTheRoomPeople(Settings._ANSWER_PANGAPNG_ENEMY_ATTACK + "", df.format(this.position.x) + "",
+					df.format(this.position.y) + "", dir + "", Settings.sPangPangEnemyName + Enemy_Missile_ID);
 			Enemy_Missile_ID++;
 		}
 

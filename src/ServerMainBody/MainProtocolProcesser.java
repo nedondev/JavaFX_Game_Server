@@ -18,6 +18,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -47,6 +48,7 @@ import GameUtilInformation.CatchmeBoardStatues;
 import GameUtilInformation.TicTacTocPoint;
 import Information.ClientAccessInformation;
 import Information.ClientGameInformation;
+import J_R_C.JOGL.BaseGame.Settings;
 import PangPang.AttackEnemy;
 import PangPang.Map_Controler;
 import PangPang.PangPangEnemy;
@@ -2567,7 +2569,15 @@ public class MainProtocolProcesser implements Initializable {
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1]))
 											gameRooms.get(i).setTheClientScoreAboutPangPangGameWin(splitPacket[2],
 													Integer.parseInt(splitPacket[3]));
+									break;
 
+								case Settings._REQUEST_PANGAPNG_PLAYER_DEATH:
+									for (int i = 0; i < gameRooms.size(); i++)
+										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
+											gameRooms.get(i).sendMessageInTheRoomPeople(
+													Settings._ANSWER_PANGAPNG_PLAYER_DEATH + "", splitPacket[2]);
+											break;
+										}
 									break;
 
 								/*
@@ -3565,7 +3575,7 @@ public class MainProtocolProcesser implements Initializable {
 						double elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
 						lastNanoTime = currentNanoTime;
 						stackedTime += elapsedTime;
-						if (stackedTime > 0.02) {
+						if (stackedTime > 0.022) {
 
 							String sendingPacket = Settings.sPangPangPositionInformationWordToken;
 
@@ -3573,13 +3583,15 @@ public class MainProtocolProcesser implements Initializable {
 								for (int j = 0; j < Settings.nPangPangEnemyWidth; j++) {
 									mEnemy[i][j].update(stackedTime);
 
+									DecimalFormat df = new DecimalFormat("#.##");
+
 									// send enemy position information
 									if (mEnemy[i][j].get_Is_Dead() == false)
 										sendingPacket += mEnemy[i][j].getsUnitName()
 												+ Settings.sPangPangPositionCoordinationToken
-												+ mEnemy[i][j].getPosition().x
+												+ df.format(mEnemy[i][j].getPosition().x)
 												+ Settings.sPangPangPositionCoordinationToken
-												+ mEnemy[i][j].getPosition().y
+												+ df.format(mEnemy[i][j].getPosition().y)
 												+ Settings.sPangPangPositionInformationWordToken;
 
 								} // for i
