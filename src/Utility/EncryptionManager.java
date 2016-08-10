@@ -2,12 +2,16 @@
 package Utility;
 
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
@@ -88,21 +92,34 @@ public class EncryptionManager {
 	public static String decrypt64bits(String encryptedData) {
 		Key key;
 		Cipher c;
+		boolean ischeck = true;
+
 		byte[] decValue = null;
-		try {
+		while (ischeck) {
 			key = generateKey64bits();
-			c = Cipher.getInstance(Settings.ALGO);
-			c.init(Cipher.DECRYPT_MODE, key);
-			byte[] decordedValue = DatatypeConverter.parseBase64Binary(encryptedData);
-			decValue = c.doFinal(decordedValue);
-			String decryptedValue = new String(decValue);
-			return decryptedValue;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			System.out.println(e);
+			try {
+				c = Cipher.getInstance(Settings.ALGO);
+				c.init(Cipher.DECRYPT_MODE, key);
+				byte[] decordedValue = DatatypeConverter.parseBase64Binary(encryptedData);
+				decValue = c.doFinal(decordedValue);
+				String decryptedValue = new String(decValue);
+				return decryptedValue;
+			} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvalidKeyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalBlockSizeException e) {
+				ischeck = false;
+			} catch (BadPaddingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 
-		return null;
+		return "/&" + Settings._ERROR_PACKET + "/&@";
 
 	}
 }

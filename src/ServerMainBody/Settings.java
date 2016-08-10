@@ -512,6 +512,11 @@ public class Settings {
 	 */
 	public static final int _ANSWER_PANGAPNG_PLAYER_DEATH = 0x00000062;
 
+	/**
+	 * Error Packet
+	 */
+	public static final int _ERROR_PACKET = 0xffffffff;
+
 	// Asset Constant
 
 	/**

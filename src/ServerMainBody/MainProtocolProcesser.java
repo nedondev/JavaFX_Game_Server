@@ -48,7 +48,6 @@ import GameUtilInformation.CatchmeBoardStatues;
 import GameUtilInformation.TicTacTocPoint;
 import Information.ClientAccessInformation;
 import Information.ClientGameInformation;
-import J_R_C.JOGL.BaseGame.Settings;
 import PangPang.AttackEnemy;
 import PangPang.Map_Controler;
 import PangPang.PangPangEnemy;
