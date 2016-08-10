@@ -2,8 +2,8 @@
 package GameUtilInformation;
 
 /**
- * @author KJW finish at 2016/ 02/ 15
- * @version 1.0.0v
+ * @author KJW finish at 2016/ 08/ 11
+ * @version 2.0.0v
  * @description this class for the CatchMe Game, this class manage the state of
  *              the catchMe board.
  * @copyRight of KJW all Rights Reserved and follow the MIT license

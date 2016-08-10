@@ -18,8 +18,8 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 /**
- * @author KJW finish at 2016/ 02/ 15
- * @version 1.0.0v
+ * @author KJW finish at 2016/ 08/ 11
+ * @version 2.0.0v
  * @description this class Start The Application and Set The init State
  * @copyRight of KJW all Rights Reserved and follow the MIT license
  */

@@ -2,8 +2,21 @@ package Utility;
 
 import ServerMainBody.Settings;
 
+/**
+ * @author KJW finish at 2016/ 08/ 11
+ * @version 2.0.0v
+ * @description this class split the packet using Token defined in
+ *              Settings.class
+ * @copyRight of KJW all Rights Reserved and follow the MIT license
+ */
 public class SplitPacketManager {
-	
+
+	/**
+	 * split the multiple packet to packets
+	 * 
+	 * @param packet
+	 * @return
+	 */
 	public static String[] splitMultiplePacket(String packet) {
 
 		String _partitioningPacket[] = packet.split(Settings.sReceiverSplitMultipleToken);

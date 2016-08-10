@@ -19,7 +19,20 @@ import org.apache.commons.codec.binary.Hex;
 
 import ServerMainBody.Settings;
 
+/**
+ * @author KJW finish at 2016/ 08/ 11
+ * @version 2.0.0v
+ * @description this class encryption and decyription class
+ * @copyRight of KJW all Rights Reserved and follow the MIT license
+ */
 public class EncryptionManager {
+	/**
+	 * this method change the message String to encrypt String using 32bits AES
+	 * 
+	 * @param message
+	 * @return
+	 * @throws Exception
+	 */
 	public static String encrypt16bits(String message) throws Exception {
 
 		// use key coss2
@@ -35,6 +48,14 @@ public class EncryptionManager {
 
 	}
 
+	/**
+	 * this method change the message encrypt String to normal String using
+	 * 32bits AES
+	 * 
+	 * @param encrypted
+	 * @return
+	 * @throws Exception
+	 */
 	public static String decrypt16bits(String encrypted) throws Exception {
 
 		// use key coss2
@@ -50,6 +71,11 @@ public class EncryptionManager {
 		return originalString;
 	}
 
+	/**
+	 * this method generate key for 64bits AES Encryption
+	 * 
+	 * @return
+	 */
 	private static Key generateKey64bits() {
 		byte[] keyValue = null;
 		MessageDigest sha = null;
@@ -71,6 +97,12 @@ public class EncryptionManager {
 		return null;
 	}
 
+	/**
+	 * this method change the message String to encrypt String using 64bits AES
+	 * 
+	 * @param Data
+	 * @return
+	 */
 	public static String encrypt64bits(String Data) {
 		Key key;
 		Cipher c;
@@ -89,6 +121,15 @@ public class EncryptionManager {
 		return null;
 	}
 
+	/**
+	 * this method change the message encrypt String to normal String using
+	 * 64bits AES
+	 * 
+	 * if decpytion fail then returnERROR_PACKET(-1)
+	 * 
+	 * @param encryptedData
+	 * @return
+	 */
 	public static String decrypt64bits(String encryptedData) {
 		Key key;
 		Cipher c;

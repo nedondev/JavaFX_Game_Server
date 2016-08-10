@@ -21,8 +21,8 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 /**
- * @author KJW finish at 2016/ 02/ 15
- * @version 1.0.0v
+ * @author KJW finish at 2016/ 08/ 11
+ * @version 2.0.0v
  * @description this class manage the Server Starter
  * @copyRight of KJW all Rights Reserved and follow the MIT license
  */
