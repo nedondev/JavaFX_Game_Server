@@ -2,9 +2,15 @@ package PangPang;
 
 import java.util.Random;
 
-//------------------------
-// 적군의  공격 - 생성자 없음
-//------------------------
+import ServerMainBody.Settings;
+
+/**
+ * @author KJW finish at 2016/ 08/ 11
+ * @version 2.0.0v
+ * @description this class for the PangPang, this class manage the PangPang
+ *              Enemy
+ * @copyRight of KJW all Rights Reserved and follow the MIT license
+ */
 public class AttackEnemy {
 	public int loop = 0; // 루프 카운터
 	private Random rnd = new Random();
@@ -12,23 +18,31 @@ public class AttackEnemy {
 	private Map_Controler map_ctrl;
 	private PangPangEnemy enemys[][];
 
+	/**
+	 * pangapng Enemy constructor
+	 * 
+	 * @param mpCtrl
+	 *            - Map_Controler
+	 * @param mEnemy
+	 *            - Enemy Set
+	 */
 	public AttackEnemy(Map_Controler mpCtrl, PangPangEnemy mEnemy[][]) {
 		this.map_ctrl = mpCtrl;
 		enemys = mEnemy;
 	}
 
-	// ------------------------
-	// 적군의 공격 - 생성자 없음
-	// ------------------------
+	/**
+	 * init enemy attack
+	 */
 	public void ResetAttack() {
 		loop = 0;
 	}
 
-	// ------------------------
-	// 공격 명령
-	// ------------------------
+	/**
+	 * Attack mode
+	 */
 	public void Attack() {
-		if (map_ctrl.get_Enemy_live_Count() <= 10) { // 적이 10마리 이하면
+		if (map_ctrl.get_Enemy_live_Count() <= Settings.nTotalPangPangEnemyAttackWhenThisNumber) {
 			AttackAll(); // 일제 총공격
 			return;
 		}
@@ -119,17 +133,21 @@ public class AttackEnemy {
 		}
 	}
 
-	// ------------------------
-	// 적군의 공격
-	// ------------------------
+	/**
+	 * decide Attack Path when Enemy state is Attack
+	 * 
+	 * @param kind
+	 * @param num
+	 * @param aKind
+	 */
 	private void AttackPath(int kind, int num, int aKind) {
 		// 위에서 지시한 공격 루트로 이동 - Sprite Attack 참조
 		enemys[kind][num].begin_Attack(aKind);
 	}
 
-	// ------------------------
-	// 남은 적군 총공격
-	// ------------------------
+	/**
+	 * all of enemy Attack mode
+	 */
 	private void AttackAll() {
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 8; j++) {

@@ -2,11 +2,23 @@ package PangPang;
 
 import ServerMainBody.Settings;
 
+/**
+ * @author KJW finish at 2016/ 08/ 12
+ * @version 2.0.0v
+ * @description this class for the PangPang, this class manage the pangapng
+ *              Position
+ * @copyRight of KJW all Rights Reserved and follow the MIT license
+ */
 public class Position {
 	private int pos_X[][] = new int[6][8];
 	private int pos_Y[][] = new int[6][8];
 	private int enemy[][] = new int[6][8];
 
+	/**
+	 * Position constructor
+	 * 
+	 * @param data
+	 */
 	public Position(String data) {
 		String tmp[] = data.split("\n");
 		String s;
@@ -26,17 +38,16 @@ public class Position {
 			} // for j
 		} // for i
 
-		int top = 105; // 적군 지면으로 부터 떨어진 거리 이미지 크기 20 * 20
-		int left = 90; // 적군 왼쪽 여백
-		int wid = 25; // 적군 상하 좌우 간격
+		int top = 105;
+		int left = 90;
+		int wid = 25;
 		int x;
 
-		// 적군 view에 그려질 처음 좌표를 구하는 것.
 		for (int i = 0; i < 6; i++) {
 			if (i <= 1) {
 				for (int j = 0; j < 8; j++) {
 					pos_X[i][j] = j * wid + left;
-					pos_Y[i][j] = Settings.nGameAsteroidSceneHeight - ((6-i) * wid + top);
+					pos_Y[i][j] = Settings.nGameAsteroidSceneHeight - ((6 - i) * wid + top);
 				} // for j
 			} else {
 				for (int j = 0; j < 8; j++) {
@@ -45,31 +56,43 @@ public class Position {
 					else
 						x = j / 2 + 4;
 					pos_X[i][j] = x * wid + left;
-					pos_Y[i][j] = Settings.nGameAsteroidSceneHeight -((6-i) * wid + top);
-				}// for j
+					pos_Y[i][j] = Settings.nGameAsteroidSceneHeight - ((6 - i) * wid + top);
+				} // for j
 			} // if
-		}// for i
+		} // for i
 
 	}
-	
-	//-------------------------------------
-	//캐릭터 번호 구하기
-	//-------------------------------------
-	public int getEnemyNum(int kind, int num){
+
+	/**
+	 * enemy information loading
+	 * 
+	 * @param kind
+	 * @param num
+	 * @return
+	 */
+	public int getEnemyNum(int kind, int num) {
 		return enemy[kind][num];
 	}
-	
-	//-------------------------------------
-	//pos_x
-	//-------------------------------------
-	public int get_Pos_X(int kind, int num){
+
+	/**
+	 * enemy x position
+	 * 
+	 * @param kind
+	 * @param num
+	 * @return
+	 */
+	public int get_Pos_X(int kind, int num) {
 		return pos_X[kind][num];
 	}
-	
-	//-------------------------------------
-	//pos_y
-	//-------------------------------------
-	public int get_Pos_Y(int kind, int num){
+
+	/**
+	 * enemy y position
+	 * 
+	 * @param kind
+	 * @param num
+	 * @return
+	 */
+	public int get_Pos_Y(int kind, int num) {
 		return pos_Y[kind][num];
 	}
 }

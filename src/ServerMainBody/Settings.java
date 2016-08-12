@@ -73,6 +73,7 @@ public class Settings {
 	 * Request The Wait Room Clients Sending Message 11
 	 */
 	public static final int _REQUEST_WAITING_ROOM_SENDING_MESSAGE = 0x0000000b;
+
 	/**
 	 * Answer The Wait Room Clients Sending Message 12
 	 */
@@ -614,6 +615,9 @@ public class Settings {
 	 */
 	public static final int nGameMeteorGame = 3;
 
+	/**
+	 * PangPang Constant Count
+	 */
 	public static final int nGamePangPang = 4;
 
 	/**
@@ -656,8 +660,13 @@ public class Settings {
 	 */
 	public static final String sGameStringStyleMeteorGame = "¿î¼®°ÔÀÓ";
 
+	/**
+	 * game of siege Game Text
+	 */
 	public static final String sGameStringStyleSiegeWarefare = "°ø¼º°ÔÀÓ";
-
+	/**
+	 * game of PangPang text
+	 */
 	public static final String sGameStringStylePangPang = "ÆÎÆÎ";
 
 	/**
@@ -665,67 +674,168 @@ public class Settings {
 	 */
 	public static final int nConnectionServerPortNumber = 5001;
 
+	/**
+	 * total Asteroid number of universeGame
+	 */
 	public static final int nSettingAsteroidNumber = 100;
 
+	/**
+	 * Asteroid Game and PangPang Game Maximum windows width
+	 */
 	public static final int nGameAsteroidSceneWidth = 360;
 
+	/**
+	 * Asteroid Game and PangPang Game Maximum windows height
+	 */
 	public static final int nGameAsteroidSceneHeight = 280;
 
+	/**
+	 * shell input maximum length
+	 */
 	public static final int nServerMaxCommandLenth = 50;
 
+	/**
+	 * if server exit commend run. this server will be terminated after 5s
+	 */
 	public static final int nServerExitDefaultSeconds = 5;
 
+	/**
+	 * maximum saving shell commends
+	 */
 	public static final int nMaximumSizeOfCommandsContainer = 20;
 
+	/**
+	 * maximum word word length
+	 */
 	public static final int nMaximumCommandWordSize = 10;
 
+	/**
+	 * 32bits encrypt key for AES
+	 */
 	public static final String sEncryptKey = "fe8025947de7cd71";
 
+	/**
+	 * encrypt mode
+	 */
 	public static final String ALGO = "AES";
 
+	/**
+	 * 64bits encrypt key for AES
+	 */
 	public static final String keyStr = "Z8LSq0wWwB5v+6YJzurcP463H3F12iZh74fDj4S74oUH4EONkiKb2FmiWUbtFh97GG/c/lbDE47mvw6j94yXxKHOpoqu6zpLKMKPcOoSppcVWb2q34qENBJkudXUh4MWcreondLmLL2UyydtFKuU9Sa5VgY/CzGaVGJABK2ZR94=";
 
+	/**
+	 * maximum receive buffer size
+	 */
 	public static int nReceiveBufferSize = 10000;
 
+	/**
+	 * update meteor size
+	 */
 	public static final double fUpDoubleMeteorSize = 0.5f;
 
+	/**
+	 * db name for using this server - depend on your pc
+	 */
 	public static final String DBName = "test";
 
+	/**
+	 * this server's mode
+	 */
 	public static final boolean isDevelopingMode = true;
 
+	/**
+	 * client version check - it is must same client
+	 */
 	public static String clientVersion = "0.0.1v";
 
+	/**
+	 * build time number
+	 */
 	public static int nBuildingTimes;
 
+	/**
+	 * server information saving file name
+	 */
 	public static final String sBuildingVersionFileName = "serverV.jrc";
 
+	/**
+	 * server shell user information saving file name
+	 */
 	public static final String sServerInfo = "serverinfo.jrc";
 
+	/**
+	 * server title
+	 */
 	public static final String sServerTitle = "J.R.C Server";
 
+	/**
+	 * packet sending split token
+	 */
 	public static final String sSenderSplitProtocolToken = "/&";
 
+	/**
+	 * packet receive split token
+	 */
 	public static final String sReceiverSplitProtocolToken = "/&&";
 
+	/**
+	 * packet split sending multiple token
+	 */
 	public static final String sSenderSplitMultipleToken = "@";
 
+	/**
+	 * packet split receive multiple token
+	 */
 	public static final String sReceiverSplitMultipleToken = "@";
 
+	/**
+	 * pangapng position information token
+	 */
 	public static final String sPangPangPositionInformationWordToken = "!!";
 
+	/**
+	 * pangpang position coordinator token
+	 */
 	public static final String sPangPangPositionCoordinationToken = ">!";
 
+	/**
+	 * pangpang main player height
+	 */
 	public static final int nPangPangMainPlayerHeigh = 15;
 
+	/**
+	 * database system password
+	 */
 	public static final String sDatabaseSystemPassword = "1234";
 
+	/**
+	 * database system id
+	 */
 	public static final String sDatabaseSystemRoot = "root";
 
+	/**
+	 * database url
+	 */
 	public static final String sDataBaseSystemUrl = "jdbc:mysql://localhost";
 
+	/**
+	 * pangapng enemy image width
+	 */
 	public static final int nPangPangEnemyWidth = 8;
 
+	/**
+	 * pangpang enemy image height
+	 */
 	public static final int nPangPangEnemyHeight = 6;
 
+	/**
+	 * pangpang enemy init unique name
+	 */
 	public static final String sPangPangEnemyName = "PangPangEnemy";
+
+	/**
+	 * pangapng enemy total attack number
+	 */
+	public static final int nTotalPangPangEnemyAttackWhenThisNumber = 10;
 }

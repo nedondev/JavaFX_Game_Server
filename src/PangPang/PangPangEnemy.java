@@ -3,54 +3,60 @@ package PangPang;
 import java.text.DecimalFormat;
 import java.util.Random;
 
-import com.mysql.fabric.xmlrpc.Client;
-
 import ServerMainBody.MainProtocolProcesser.GameRoom;
 import ServerMainBody.Settings;
 import Utility.Math_Vector;
 
+/**
+ * @author KJW finish at 2016/ 08/ 12
+ * @version 2.0.0v
+ * @description this class for the PangPang, this class manage the pangapng
+ *              enemy information
+ * @copyRight of KJW all Rights Reserved and follow the MIT license
+ */
 public class PangPangEnemy {
 
 	private Map_Controler map_controler;
 	private Math_Vector velocity;
 	private Math_Vector position;
 
-	final static int ENTER = 1; // 캐릭터 입장
-	final static int BEGINPOS = 2; // 전투 대형으로 가기 위해 좌표 계산
-	final static int POSITION = 3; // 전투 대형으로 이동 중
-	final static int SYNC = 4; // 전투 대형에서 대기중
-	final static int ATTACK = 5; // 공격중
-	final static int BEGINBACK = 6; // View를 벗어나서 다시 입장할 준비
-	final static int BACKPOS = 7; // 다시 입장 중
+	final static int ENTER = 1; // enemy enter state
+	final static int BEGINPOS = 2; // enemy return position state
+	final static int POSITION = 3; // enemy position state
+	final static int SYNC = 4; // enemy sync state
+	final static int ATTACK = 5; // enemy attack state
+	final static int BEGINBACK = 6; // enemy begin attack state
+	final static int BACKPOS = 7; // enemy back postion state
 
-	final int loaf = 50; // 탈영 max
-
-	public static final float ENEMY_WIDTH = 20f; // 캐릭터 width
-	public static final float ENEMY_HEIGHT = 20f; // 캐릭터 height
+	final int loaf = 50; // max gap
 
 	public static int Enemy_Missile_ID = 0;
 
-	private boolean isDead; // 전사자인가?
-	private int shield; // 보호막
-	private int status; // 상태
+	private boolean isDead;
+	private int shield;
+	private int status;
 
 	private String sUnitName;
 
-	private int sncX; // 싱크 위치로부터 떨어져 있는 거리
-	private SinglePath sPath; // 캐럭터가 이동할 Path 1줄 (입장 및 공격 루트)
-	private float sx, sy; // 캐릭터 이동 속도
-	private int a_Kind; // 공격 루트 번호
-	private int enemy_Img_Number; // 몹 이미지 번호
-	private int sKind, sNum; // 캐릭터의 종류와 번호
-	private int pNum, col; // Path 번호와 현재의 경로
-	private int delay, dir, len; // 입장시 지연시간, 현재의 방향, 남은 거리
-	private int posX, posY; // 이동해야 할 목적지 좌표
+	private int sncX;
+	private SinglePath sPath;
+	private float sx, sy;
+	private int a_Kind;
+	private int enemy_Img_Number;
+	private int sKind, sNum;
+	private int pNum, col;
+	private int delay, dir, len;
+	private int posX, posY; //
 	private Random rnd = new Random();
 	private GameRoom mnt;
 
-	// --------------------------------
-	// 생성자
-	// --------------------------------
+	/**
+	 * pangapng enemy constructor
+	 * 
+	 * @param mnt
+	 *            - map controller
+	 * @param paraMap_controler
+	 */
 	public PangPangEnemy(GameRoom mnt, Map_Controler paraMap_controler) {
 
 		this.mnt = mnt;
@@ -60,9 +66,13 @@ public class PangPangEnemy {
 		// 내용 없음
 	}
 
-	// --------------------------------
-	// Sprite 만들기
-	// --------------------------------
+	/**
+	 * enemy init
+	 * 
+	 * @param kind
+	 * @param num
+	 * @param nName
+	 */
 	public void MakeEnemy(int kind, int num, int nName) {
 		sKind = kind;
 		sNum = num;
@@ -79,28 +89,31 @@ public class PangPangEnemy {
 		ResetEnemy();
 	}
 
-	// --------------------------------
-	// Reset Sprite
-	// --------------------------------
+	/**
+	 * reset enemy state
+	 */
 	public void ResetEnemy() {
 
 		velocity.set(new Math_Vector(0, 0));
-		pNum = this.map_controler.get_Selection(sKind, sNum); // Path
-																// 번호
-		delay = this.map_controler.get_Delay(sKind, sNum); // Delay 시간
+		pNum = this.map_controler.get_Selection(sKind, sNum);
 
-		shield = this.map_controler.get_Enemy_Life(sKind, sNum); // 보호막
-																	// 읽기
+		delay = this.map_controler.get_Delay(sKind, sNum);
+		shield = this.map_controler.get_Enemy_Life(sKind, sNum);
 
-		posX = this.map_controler.get_Pos_X(sKind, sNum); // 전투대형 위치
+		posX = this.map_controler.get_Pos_X(sKind, sNum);
 		posY = this.map_controler.get_Pos_Y(sKind, sNum);
 
-		GetPath(pNum); // pNum으로 구한 Path 읽기
+		GetPath(pNum);
 		status = ENTER;
 		isDead = false;
 
 	}
 
+	/**
+	 * update enemy
+	 * 
+	 * @param deltaTime
+	 */
 	public void update(double deltaTime) {
 
 		Move();
@@ -108,9 +121,11 @@ public class PangPangEnemy {
 		position.add(velocity.x * deltaTime, velocity.y * deltaTime);
 	}
 
-	// --------------------------------
-	// Path - Path 1줄 읽기
-	// --------------------------------
+	/**
+	 * get enemy path
+	 * 
+	 * @param num
+	 */
 	private void GetPath(int num) {
 		sPath = this.map_controler.get_Path(num); // Path 읽기
 		// Path의 시작 좌표
@@ -123,9 +138,11 @@ public class PangPangEnemy {
 		GetDir(col);
 	}
 
-	// --------------------------------
-	// GetDir - 현위치의 방향과 거리
-	// --------------------------------
+	/**
+	 * get enemy direction
+	 * 
+	 * @param col
+	 */
 	private void GetDir(int col) {
 		dir = sPath.get_Directions()[col]; // 이동할 방향
 		len = sPath.get_Lens()[col]; // 이동할 거리
@@ -134,9 +151,9 @@ public class PangPangEnemy {
 		sy = this.map_controler.get_Direc_Dis_Y(dir);
 	}
 
-	// --------------------------------
-	// Move
-	// --------------------------------
+	/**
+	 * move enemy event
+	 */
 	private void Move() {
 		if (isDead && (sKind != 5 || sNum != 0))
 			return;
@@ -165,9 +182,9 @@ public class PangPangEnemy {
 		}
 	}
 
-	// --------------------------------
-	// Enter Sprite
-	// --------------------------------
+	/**
+	 * enemy enter the main scene
+	 */
 	private void enter_Enemy() {
 		if (--delay >= 0)
 			return;
@@ -192,9 +209,9 @@ public class PangPangEnemy {
 		}
 	}
 
-	// --------------------------------
-	// BeginPos - 전투 대형으로 이동 준비
-	// --------------------------------
+	/**
+	 * enemy moving attack position
+	 */
 	private void begin_Pos() {
 		// 원래의 Path 읽기
 		if (position.x < posX + this.map_controler.syncCnt) // 이동 방향
@@ -212,97 +229,87 @@ public class PangPangEnemy {
 		status = POSITION; // 목적지로 이동 준비 끝
 	}
 
-	// --------------------------------
-	// Position - 전투 대형으로 이동 중
-	// --------------------------------
+	/**
+	 * enemy position event
+	 */
 	private void position() {
 		velocity.x = (int) (sx * 160);
 		velocity.y = (int) (sy * 160);
 
-		// 싱크 때문에 목적지가 멀어졌을 수 있으므로 방향 다시 계산
-		if (position.x < posX + this.map_controler.syncCnt) // 이동 방향
-															// 결정
-			dir = 2; // 북동(NW)쪽
+		if (position.x < posX + this.map_controler.syncCnt)
+			dir = 2;
 		else
-			dir = 14; // 북서(NW)쪽
+			dir = 14;
 
 		if (position.y < posY)
-			dir = (dir == 2) ? 2 : 14;// 6 : 10;
+			dir = (dir == 2) ? 2 : 14;
 
-		// 수평 좌표 비교
-		if (Math.abs(position.y - posY) <= 4) { // 수평 위치 도착
+		if (Math.abs(position.y - posY) <= 4) {
 			position.y = posY;
 			velocity.y = 0;
-			if (position.x < posX + this.map_controler.syncCnt) // 좌우
-																// 방향
-																// 결정
-				dir = 4; // 3시방향
+			if (position.x < posX + this.map_controler.syncCnt)
+				dir = 4;
 			else
-				dir = 12; // 9시 방향
+				dir = 12;
 		}
 
-		// 수직 좌표 비교
 		if (Math.abs(position.x - (posX + this.map_controler.syncCnt)) <= 4) {
 			position.x = posX + this.map_controler.syncCnt;
 			velocity.x = 0;
-			dir = 0; // 12시 방향
+			dir = 0;
 		}
 
 		if (position.y == posY && position.x == posX + this.map_controler.syncCnt) {
-			dir = 0; // 전투대형 위치 도착
+			dir = 0;
 			sx = 1;
-			status = SYNC; // 좌우로 이동하며 공격 명령 대기
-			return; // 싱크 유지 중
+			status = SYNC;
+			return;
 		}
 
-		sx = this.map_controler.get_Direc_Dis_X(dir); // 위에서 설정한 전투 대형
-														// 위치로
-		sy = this.map_controler.get_Direc_Dis_Y(dir); // 계속 이동
+		sx = this.map_controler.get_Direc_Dis_X(dir);
+		sy = this.map_controler.get_Direc_Dis_Y(dir);
 	}
 
-	// --------------------------------
-	// Sync & Move - 싱크를 유지하며 이동
-	// --------------------------------
+	/**
+	 * synk moving
+	 */
 	private void make_Sync() {
-		sncX = (int) this.map_controler.get_Direc_Dis_X(this.map_controler.dir); // 좌우
-																					// 이동방향
-																					// 계산
-		position.x += sncX; // 좌 또는 우로 이동
+		sncX = (int) this.map_controler.get_Direc_Dis_X(this.map_controler.dir);
+		position.x += sncX;
 
-		// Sync 설정
-		if (sKind == 5 && sNum == 0) { // 이 캐릭터가 싱크를 설정한다
-			this.map_controler.syncCnt += sncX; // 최초 도착자가 좌우로 이동한 거리
-			this.map_controler.dirCnt++; // 현재 방향으로 이동한 거리
+		if (sKind == 5 && sNum == 0) {
+			this.map_controler.syncCnt += sncX;
+			this.map_controler.dirCnt++;
 			if (this.map_controler.dirCnt >= this.map_controler.dirLen) {
-				this.map_controler.dirCnt = 0; // 현재 방향의 끝에 도착
-				this.map_controler.dirLen = 150; // 반대 방향으로 이동할 거리
-				this.map_controler.dir = 16 - this.map_controler.dir; // 이동방향
-																		// 반전
+				this.map_controler.dirCnt = 0;
+				this.map_controler.dirLen = 150;
+				this.map_controler.dir = 16 - this.map_controler.dir;
 			}
 		}
 	}
 
-	// --------------------------------
-	// Begin Attack - 공격 루트 수령
-	// --------------------------------
+	/**
+	 * begin attack enemy - re attack
+	 * 
+	 * @param aKind
+	 */
 	public void begin_Attack(int aKind) {
 
 		if (isDead || (sKind == 5 && sNum == 0))
-			return; // 싱크 기준은
-		a_Kind = aKind; // 공격에 참여하지 않음
+			return;
+		a_Kind = aKind;
 		GetPath(a_Kind + 10);
 		status = ATTACK;
 	}
 
-	// --------------------------------
-	// Attack
-	// --------------------------------
+	/**
+	 * attack enemy
+	 */
 	private void attack() {
 
 		velocity.x = (int) (sx * 150);
 		velocity.y = (int) (sy * 150);
 
-		// 비행 중에 전투 위치를 이탈함 - 탈영
 		if (position.y < -loaf || position.y > Settings.nGameAsteroidSceneHeight + loaf || position.x < -loaf
 				|| position.x > Settings.nGameAsteroidSceneWidth + loaf) {
 			status = BEGINBACK;
@@ -311,34 +318,38 @@ public class PangPangEnemy {
 
 		len--;
 		if (len >= 0)
-			return; // 현재 방향으로 계속 이동 중
+			return;
 
-		col++; // 방향 전환
+		col++;
 		if (col < sPath.get_Directions().length) {
-			GetDir(col); // 방향 전환 후 공격 시작
+			GetDir(col);
 			if (dir >= 6 && dir <= 10)
 				shoot_Missile(dir);
 		} else {
-			status = BEGINPOS; // 공격을 끝내고 끝났으면 전투 대형으로 복귀
+			status = BEGINPOS;
 		}
 	}
 
+	/**
+	 * begin back position
+	 */
 	private void begin_Back_Pos() {
-		position.y = Settings.nGameAsteroidSceneHeight; // + 40;
+		position.y = Settings.nGameAsteroidSceneHeight;
 		position.x = posX + this.map_controler.syncCnt;
 		velocity.set(new Math_Vector(0, 0));
 
 		status = BACKPOS;
 	}
 
+	/**
+	 * back position
+	 */
 	private void back_Position() {
-		// 전투 대향이 좌우 어느 쪽으로 이동중인가를 파ㄴ별
 
 		sncX = (int) this.map_controler.get_Direc_Dis_X(this.map_controler.dir);
 		velocity.y = -80;
 		position.x += sncX;
 
-		// 복귀 후 마지막 공격 루트 다시
 		if (Math.abs(position.y - posY) <= 4) {
 			GetPath(a_Kind + 10);
 			status = ATTACK;
@@ -346,26 +357,54 @@ public class PangPangEnemy {
 
 	}
 
+	/**
+	 * get image character number
+	 * 
+	 * @return
+	 */
 	public int get_Chracter_Number() {
 		return this.enemy_Img_Number;
 	}
 
+	/**
+	 * get unit direction
+	 * 
+	 * @return
+	 */
 	public int get_Dir() {
 		return this.dir;
 	}
 
+	/**
+	 * get unit dead statues
+	 * 
+	 * @return
+	 */
 	public boolean get_Is_Dead() {
 		return this.isDead;
 	}
 
+	/**
+	 * get statues
+	 * 
+	 * @return
+	 */
 	public int get_Statue() {
 		return this.status;
 	}
 
+	/**
+	 * get shield statues
+	 * 
+	 * @return
+	 */
 	public int get_Shield() {
 		return this.shield;
 	}
 
+	/**
+	 * decrease shield if the shield value down then 0, this unit will be dead
+	 */
 	public void decreaseShield() {
 		this.shield--;
 
@@ -373,21 +412,42 @@ public class PangPangEnemy {
 			this.isDead = true;
 	}
 
+	/**
+	 * get unit position
+	 * 
+	 * @return
+	 */
 	public Math_Vector getPosition() {
 		return position;
 	}
 
+	/**
+	 * set unit position
+	 * 
+	 * @param position
+	 */
 	public void setPosition(Math_Vector position) {
 		this.position = position;
 	}
 
+	/**
+	 * get unit unique name
+	 * 
+	 * @return
+	 */
 	public String getsUnitName() {
 		return sUnitName;
 	}
 
+	/**
+	 * make pangpang enemy missile
+	 * 
+	 * @param dir
+	 */
 	private void shoot_Missile(int dir) {
 		DecimalFormat df = new DecimalFormat("#.##");
 
+		// 20 % attack enemy event occurred
 		if (rnd.nextInt(10) > 8) {
 			mnt.sendMessageInTheRoomPeople(Settings._ANSWER_PANGAPNG_ENEMY_ATTACK + "", df.format(this.position.x) + "",
 					df.format(this.position.y) + "", dir + "", Settings.sPangPangEnemyName + Enemy_Missile_ID);

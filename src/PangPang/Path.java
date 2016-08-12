@@ -2,16 +2,22 @@ package PangPang;
 
 import java.util.ArrayList;
 
-//-------------------------------
-//J.R.C company
-//map file
-//Path Decoder
-//-------------------------------
-
+/**
+ * @author KJW finish at 2016/ 08/ 12
+ * @version 2.0.0v
+ * @description this class for the PangPang, this class manage the pangapng Path
+ * @copyRight of KJW all Rights Reserved and follow the MIT license
+ */
 public class Path {
 
 	private ArrayList<SinglePath> mPath = new ArrayList<SinglePath>();
 
+	/**
+	 * Path Constructor
+	 * 
+	 * @param map_data
+	 *            - map information
+	 */
 	public Path(String map_data) {
 		String tmp[] = map_data.split("\n");
 		for (int i = 0; i < tmp.length; i++) {
@@ -22,6 +28,12 @@ public class Path {
 
 	}
 
+	/**
+	 * get path
+	 * 
+	 * @param index
+	 * @return
+	 */
 	public SinglePath getPath(int index) {
 		return mPath.get(index);
 	}
