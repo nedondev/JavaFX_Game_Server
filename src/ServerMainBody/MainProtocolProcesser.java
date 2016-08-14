@@ -89,7 +89,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 /**
- * @author KJW finish at 2016/ 08/ 11
+ * @author KJW finish at 2016/ 08/ 14
  * @version 2.0.0v
  * @description this class manage the Server and Database System.
  * @copyRight of KJW all Rights Reserved and follow the MIT license
@@ -120,6 +120,9 @@ public class MainProtocolProcesser implements Initializable {
 	@FXML
 	private ListView<String> clientListView;
 
+	/**
+	 * server text edit this edit manages the shell input string
+	 */
 	@FXML
 	private javafx.scene.control.TextField serverTextEdit;
 
@@ -148,6 +151,9 @@ public class MainProtocolProcesser implements Initializable {
 	 */
 	private List<GameRoom> gameRooms = new Vector<MainProtocolProcesser.GameRoom>();
 
+	/**
+	 * meteor game information
+	 */
 	private List<UniverseGame> universeGames = new Vector<MainProtocolProcesser.UniverseGame>();
 
 	/**
@@ -180,34 +186,78 @@ public class MainProtocolProcesser implements Initializable {
 	 */
 	private String piechartClientName;
 
+	/**
+	 * server exit tag
+	 */
 	private boolean isServerExit;
 
+	/**
+	 * server termination count
+	 */
 	private int nExitCount;
 
+	/**
+	 * shell commend indicator
+	 */
 	private int nCommandIndicatorPoisition;
 
+	/**
+	 * shell commend container indicator
+	 */
 	private int nCommandsContainerIndicator;
-
+	/**
+	 * shell commend container
+	 */
 	private String[] sCommandsContainer;
 
+	/**
+	 * check sudo id is exists
+	 */
 	private boolean isMakeSudoId;
 
+	/**
+	 * check login sudo id
+	 */
 	private boolean isSudoIdLogin;
 
+	/**
+	 * sudo id
+	 */
 	private String sSudoID;
 
+	/**
+	 * sudo password
+	 */
 	private String sSudoPassword;
 
+	/**
+	 * sudo administer email - address
+	 */
 	private String sEmailAddress;
 
+	/**
+	 * check sudo delete event occured
+	 */
 	private boolean isSudodeleteEventOccured;
 
+	/**
+	 * sudo delete user id
+	 */
 	private String sSudoDeleteUserID;
 
+	/**
+	 * check sudo id deletion
+	 */
 	private boolean isSudoIdDelete;
 
+	/**
+	 * commend first start position
+	 */
 	int _firstPoistion;
 
+	/**
+	 * total exist room number
+	 */
 	private long nTotalRoomNumber;
 
 	/*
@@ -303,10 +353,22 @@ public class MainProtocolProcesser implements Initializable {
 		readSudoUserinformationFromFile();
 	}
 
+	/**
+	 * init main DB
+	 * 
+	 * @param A
+	 *            - DB name : default - test
+	 * @throws SQLException
+	 */
 	private void initUsingMainDB(String A) throws SQLException {
 		stmt.executeQuery("use " + A);
 	}
 
+	/**
+	 * int database system scema for gameplayer
+	 * 
+	 * @throws SQLException
+	 */
 	private void initCreateUserinfoSchma() throws SQLException {
 		ResultSet rs;
 		/*
@@ -335,6 +397,11 @@ public class MainProtocolProcesser implements Initializable {
 		}
 	}
 
+	/**
+	 * init database system for GameDB
+	 * 
+	 * @throws SQLException
+	 */
 	private void initCreateGameDBSchema() throws SQLException {
 		ResultSet rs;
 		/*
@@ -390,6 +457,12 @@ public class MainProtocolProcesser implements Initializable {
 		}
 	}
 
+	/**
+	 * check shell is validation.
+	 * 
+	 * @param max_Lengh
+	 * @return
+	 */
 	public EventHandler<KeyEvent> message_text_Validation(final Integer max_Lengh) {
 		return new EventHandler<KeyEvent>() {
 			@Override
@@ -404,6 +477,11 @@ public class MainProtocolProcesser implements Initializable {
 		};
 	}
 
+	/**
+	 * handle shell btn event
+	 * 
+	 * @param e
+	 */
 	public void handleBtnKeyEvent(KeyEvent e) {
 		switch (e.getCode()) {
 		case ENTER:
@@ -452,14 +530,23 @@ public class MainProtocolProcesser implements Initializable {
 		}
 	}
 
+	/**
+	 * set server command -shell commend container
+	 */
 	private void setServerCommandTextEdit() {
 		Platform.runLater(() -> serverTextEdit.setText(sCommandsContainer[nCommandIndicatorPoisition]));
 		Platform.runLater(() -> serverTextEdit.positionCaret(serverTextEdit.getLength()));
 
 	}
 
+	/**
+	 * temp Thread manage command processing
+	 */
 	private Thread temp;
 
+	/**
+	 * processing shell commands
+	 */
 	private void processCommand() {
 		String command = serverTextEdit.getText();
 
@@ -989,6 +1076,7 @@ public class MainProtocolProcesser implements Initializable {
 					}
 					break;
 
+				// room create
 				case "create":
 					switch (sCommandWords[1]) {
 					case "-help":
@@ -1003,6 +1091,7 @@ public class MainProtocolProcesser implements Initializable {
 					}
 					break;
 
+				// room delete
 				case "delete":
 					switch (sCommandWords[1]) {
 					case "-help":
@@ -1026,19 +1115,29 @@ public class MainProtocolProcesser implements Initializable {
 					break;
 				}
 
+			// check invalid commands
 		} else {
 			invalidShellCommand();
 		}
 	}
 
+	/**
+	 * check invalid Shell parameter
+	 */
 	private void invalidShellParameter() {
 		Platform.runLater(() -> displayText("wrong parameter"));
 	}
 
+	/**
+	 * check invalid shell commands
+	 */
 	private void invalidShellCommand() {
 		Platform.runLater(() -> displayText("invalid shall command"));
 	}
 
+	/**
+	 * read sudo user information - encrypted by using AES 64bits
+	 */
 	private void readSudoUserinformationFromFile() {
 		BufferedReader br;
 		try {
@@ -1063,6 +1162,9 @@ public class MainProtocolProcesser implements Initializable {
 		System.out.println("file reading complete");
 	}
 
+	/**
+	 * serverinfo file clean
+	 */
 	private void writeFileClean() {
 		PrintWriter pw;
 		try {
@@ -1078,6 +1180,9 @@ public class MainProtocolProcesser implements Initializable {
 
 	}
 
+	/**
+	 * write sudo user information to serverinfo file
+	 */
 	private void writeSudoUserinformationToFile() {
 		PrintWriter pw;
 		try {
@@ -1097,6 +1202,12 @@ public class MainProtocolProcesser implements Initializable {
 
 	}
 
+	/**
+	 * parse shell commends
+	 * 
+	 * @param commandSyntax
+	 * @return
+	 */
 	String[] parserOfCommandSyntax(String commandSyntax) {
 		String sCommandWords[] = new String[Settings.nMaximumCommandWordSize];
 
@@ -1280,6 +1391,14 @@ public class MainProtocolProcesser implements Initializable {
 
 	}
 
+	/**
+	 * sending email module. you can use this for checking validation, or find
+	 * id.
+	 * 
+	 * @param Email
+	 * @param sTitle
+	 * @param sMessage
+	 */
 	public void sendingEmail(String Email, String sTitle, String sMessage) {
 		final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
 		// Get a Properties object
@@ -1449,6 +1568,9 @@ public class MainProtocolProcesser implements Initializable {
 
 	}
 
+	/**
+	 * server shell text edit init
+	 */
 	private void serverTextCommandEditInit() {
 		serverTextEdit.setEditable(true);
 		serverTextEdit.setVisible(true);
@@ -1519,6 +1641,9 @@ public class MainProtocolProcesser implements Initializable {
 		}
 	}
 
+	/**
+	 * unable server shell text editor
+	 */
 	private void unableServerTextEdit() {
 		serverTextEdit.setEditable(false);
 		serverTextEdit.setVisible(false);
@@ -1604,8 +1729,14 @@ public class MainProtocolProcesser implements Initializable {
 		 */
 		private ClientGameInformation catchMe;
 
+		/**
+		 * game information for meteor
+		 */
 		private ClientGameInformation meteor;
 
+		/**
+		 * game information for pangpang
+		 */
 		private ClientGameInformation pangPang;
 
 		/**
@@ -1613,6 +1744,9 @@ public class MainProtocolProcesser implements Initializable {
 		 */
 		private ArrayList<Integer> CheckAccessTime = new ArrayList<Integer>();
 
+		/**
+		 * ms counter
+		 */
 		private Timer msTimer;
 
 		/**
@@ -1625,6 +1759,9 @@ public class MainProtocolProcesser implements Initializable {
 		 */
 		private ResultSet rs;
 
+		/**
+		 * random variables
+		 */
 		private Random rnd;
 
 		/**
@@ -1633,6 +1770,9 @@ public class MainProtocolProcesser implements Initializable {
 		 */
 		private int nPreviousItemNumber;
 
+		/**
+		 * Destroyed asteroid number;
+		 */
 		private int nDestoryMeteor;
 
 		/*
@@ -2385,10 +2525,12 @@ public class MainProtocolProcesser implements Initializable {
 
 									break;
 
+								// request init universe game on mobile
 								case Settings._REQUEST_MOBILE_MAKE_GAME_UNIVERSE:
 									universeGames.add(new UniverseGame(Client.this, 2, 100));
 									break;
 
+								// request meteorgame click event
 								case Settings._REQUEST_METEORGAME_SET_CLIECK_EVENT:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
@@ -2400,6 +2542,7 @@ public class MainProtocolProcesser implements Initializable {
 										}
 									break;
 
+								// request pangapng init game event
 								case Settings._REQUEST_PANGPANG_INIT_GAME_PLAY:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
@@ -2413,6 +2556,7 @@ public class MainProtocolProcesser implements Initializable {
 										}
 									break;
 
+								// request meteor game init game event
 								case Settings._REQUEST_METEORGAME_INIT_GAME_PLAY:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
@@ -2425,6 +2569,8 @@ public class MainProtocolProcesser implements Initializable {
 										}
 									break;
 
+								// request meteorgame reinit event for second
+								// user
 								case Settings._REQUEST_METEORGAME_REINIT_GAME_PLAY:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
@@ -2436,6 +2582,7 @@ public class MainProtocolProcesser implements Initializable {
 									writeOnTheBoard(protocol, splitPacket);
 									break;
 
+								// request pangapng reinit event for second user
 								case Settings._REQUEST_PANGPANG_REINIT_GAME_PLAY:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
@@ -2446,6 +2593,7 @@ public class MainProtocolProcesser implements Initializable {
 										}
 									break;
 
+								// request meteor game client out or room event
 								case Settings._REQUEST_METEORGAME_OUT_OF_PLAYER:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
@@ -2458,6 +2606,7 @@ public class MainProtocolProcesser implements Initializable {
 
 									break;
 
+								// request pangapng client out of room event
 								case Settings._REQUEST_PANGPANG_OUT_OF_PLAYER:
 
 									for (int i = 0; i < gameRooms.size(); i++)
@@ -2469,6 +2618,7 @@ public class MainProtocolProcesser implements Initializable {
 										}
 									break;
 
+								// request meteor game player movement event
 								case Settings._REQUEST_METEORGAME_PLAYER_MOVING:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
@@ -2479,6 +2629,9 @@ public class MainProtocolProcesser implements Initializable {
 										}
 									break;
 
+								// request pangpang player movement event. this
+								// is processed in client just sending each
+								// position information
 								case Settings._REQUEST_PANGPANG_PLAYER_MOVING:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
@@ -2489,6 +2642,7 @@ public class MainProtocolProcesser implements Initializable {
 										}
 									break;
 
+								// request asteroid deletion event
 								case Settings._REQUEST_METEORGAME_METEOR_DELETE:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
@@ -2502,6 +2656,7 @@ public class MainProtocolProcesser implements Initializable {
 										}
 									break;
 
+								// request meteor game finish event
 								case Settings._REQUEST_METEORGAME_METEOR_GAME_FINISH:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
@@ -2510,10 +2665,14 @@ public class MainProtocolProcesser implements Initializable {
 										}
 									break;
 
+								// request mobile pangpang score -> after using
+								// db , now checking sending packet
 								case Settings._REQEUST_MOBILE_PANGPANG_SCORE:
 									sendPacket(Settings._ANSWER_MOBILE_PANGPANG_SCORE + "", "success");
 									break;
 
+								// request pc client version check event. if
+								// version wrong, client can not use
 								case Settings._REQUEST_PC_CLIENT_VERSION_CHECK:
 									if (splitPacket[1].equals(Settings.clientVersion))
 										sendPacket(Settings._ANSWER_PC_CLIENT_VERSION_CHECK + "", true + "");
@@ -2522,6 +2681,7 @@ public class MainProtocolProcesser implements Initializable {
 
 									break;
 
+								// request meteorgame player size up event
 								case Settings._REQUEST_METEORGAME_METEOR_PLAYER_SIZE_UP:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
@@ -2536,6 +2696,7 @@ public class MainProtocolProcesser implements Initializable {
 										}
 									break;
 
+								// request pangapng player attack event
 								case Settings._REQUEST_PANGAPNG_ATTACK:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
@@ -2546,6 +2707,8 @@ public class MainProtocolProcesser implements Initializable {
 										}
 									break;
 
+								// request pangpang player and enemy collision
+								// event
 								case Settings._REQUEST_PANGAPNG_ENEMY_COLLISION_EVENT:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
@@ -2554,6 +2717,7 @@ public class MainProtocolProcesser implements Initializable {
 										}
 									break;
 
+								// request pangpang game finish event
 								case Settings._REQUEST_PANGAPNG_FINISH:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
@@ -2563,6 +2727,7 @@ public class MainProtocolProcesser implements Initializable {
 										}
 									break;
 
+								// request pangpang game win event
 								case Settings._REQUEST_PANGAPNG_FINISH_WIN:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1]))
@@ -2570,6 +2735,9 @@ public class MainProtocolProcesser implements Initializable {
 													Integer.parseInt(splitPacket[3]));
 									break;
 
+								// request pangpang player death event. it is
+								// processed in client code. just sending each
+								// client information
 								case Settings._REQUEST_PANGAPNG_PLAYER_DEATH:
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
@@ -2610,6 +2778,12 @@ public class MainProtocolProcesser implements Initializable {
 					}
 				}
 
+				/**
+				 * wait room message validcheck - whisper, user information etc
+				 * 
+				 * @param sMessageProtocol
+				 * @return
+				 */
 				private boolean waitingRoomMessageValidCheck(String[] sMessageProtocol) {
 
 					if (sMessageProtocol.length <= 2) {
@@ -2627,6 +2801,12 @@ public class MainProtocolProcesser implements Initializable {
 					return true;
 				}
 
+				/**
+				 * init db information all of game or user info
+				 * 
+				 * @param splitPacket
+				 * @throws SQLException
+				 */
 				private void initUserDBinformation(String[] splitPacket) throws SQLException {
 					query = "INSERT INTO userinformation VALUE ('" + splitPacket[1] + "','" + splitPacket[2] + "')";
 					stmt.executeUpdate(query);
@@ -2652,7 +2832,8 @@ public class MainProtocolProcesser implements Initializable {
 
 		/**
 		 * write the message on the server's panel. this method manage the
-		 * previous behavior
+		 * previous behavior - if you want to monitor some of packet you just
+		 * register this protocol in the server
 		 * 
 		 * @param protocol
 		 * @param splitPacket
@@ -2727,14 +2908,29 @@ public class MainProtocolProcesser implements Initializable {
 			}
 		}
 
+		/**
+		 * get terminate time Date
+		 * 
+		 * @return
+		 */
 		public Date getdTerminateTime() {
 			return dTerminateTime;
 		}
 
+		/**
+		 * send terminate Date
+		 * 
+		 * @param dTerminateTime
+		 */
 		public void setdTerminateTime(Date dTerminateTime) {
 			this.dTerminateTime = dTerminateTime;
 		}
 
+		/**
+		 * get access time
+		 * 
+		 * @return
+		 */
 		public Date getdAccessTime() {
 			return dAccessTime;
 		}
@@ -3058,16 +3254,21 @@ public class MainProtocolProcesser implements Initializable {
 			this.catchMe = catchMe;
 		}
 
+		/**
+		 * get client game information
+		 * 
+		 * @return
+		 */
 		public ClientGameInformation getPangPang() {
 			return pangPang;
 		}
 
-		public void setPangPang(ClientGameInformation pangPang) {
-			this.pangPang = pangPang;
-		}
-
 		/**
-		 * get the room entered client
+		 * set pangapng game information public void
+		 * setPangPang(ClientGameInformation pangPang) { this.pangPang =
+		 * pangPang; }
+		 * 
+		 * /** get the room entered client
 		 * 
 		 * @return
 		 */
@@ -3111,14 +3312,27 @@ public class MainProtocolProcesser implements Initializable {
 			return this.clientName;
 		}
 
+		/**
+		 * get destroyed asteroid number
+		 * 
+		 * @return
+		 */
 		public int getnDestoryMeteor() {
 			return nDestoryMeteor;
 		}
 
+		/**
+		 * set destroyed asteroid number
+		 * 
+		 * @param nDestoryMeteor
+		 */
 		public void setnDestoryMeteor(int nDestoryMeteor) {
 			this.nDestoryMeteor = nDestoryMeteor;
 		}
 
+		/**
+		 * increase destroyed asteroid number +1
+		 */
 		public void setnIncreaseDestoryMeteor() {
 			this.nDestoryMeteor++;
 		}
@@ -3136,6 +3350,12 @@ public class MainProtocolProcesser implements Initializable {
 
 	}
 
+	/**
+	 * mobile game information not yet for using after 2016 9.
+	 * 
+	 * @author KJW
+	 *
+	 */
 	class MobileClientGameRoom {
 		private final Client manager;
 
@@ -3192,6 +3412,12 @@ public class MainProtocolProcesser implements Initializable {
 
 	}
 
+	/**
+	 * UniverseGame class not yet for using after 2016 9.
+	 * 
+	 * @author KJW
+	 *
+	 */
 	class UniverseGame extends MobileClientGameRoom {
 
 		private Random rnd;
@@ -3363,23 +3589,60 @@ public class MainProtocolProcesser implements Initializable {
 		 */
 		private TicTacTocPoint pointCatchmeFirstStart;
 
+		/**
+		 * receive finish event count using numbering count
+		 */
 		private int nReceiveFinishEventCount;
 
+		/**
+		 * check finish onetime for game
+		 */
 		private boolean isCheckMeteorGameCheckFinishOneTime;
 
-		// private AnimationTimer spriteAnimationTimer;
-
+		/**
+		 * private AnimationTimer spriteAnimationTimer;
+		 */
 		private Thread spriteAnimationThread;
+
+		/**
+		 * sprite animation time if turn of off. the thread is stop
+		 */
 		private boolean isSpriteAnimationThread = true;
 
+		/**
+		 * enemy array for pangpang
+		 */
 		private PangPangEnemy mEnemy[][];
 
+		/**
+		 * game room information
+		 */
 		private GameRoom gameRoom;
 
+		/**
+		 * game room unique number
+		 */
 		private long nInitRoomNumber;
 
-		Map_Controler mpCtr;
+		/**
+		 * map controller for pangpang
+		 */
+		private Map_Controler mpCtr;
 
+		/**
+		 * game room constructor
+		 * 
+		 * @param roomManager
+		 *            - room manager
+		 * @param sRoomName
+		 *            - room name
+		 * @param nMaxmumClients
+		 *            - room maximum client number
+		 * @param nGameType
+		 *            - room game style
+		 * @param nRoomNumber
+		 *            - room unique serial number
+		 */
 		public GameRoom(Client roomManager, String sRoomName, int nMaxmumClients, int nGameType, long nRoomNumber) {
 			this.nInitRoomNumber = nRoomNumber;
 			this.nReceiveFinishEventCount = Settings.ZEROINIT;
@@ -3401,6 +3664,7 @@ public class MainProtocolProcesser implements Initializable {
 			this.isGameEnd = false;
 			this.setPlayTokenPositionNumber(Settings.nGameTokenStartNumberPosition);
 
+			// init each game
 			if (getGameType() == Settings.nGameTicTacToc) {
 				this.emptySeat = Settings.nTicTacTocBlockWidth * Settings.nTicTacTocBlockHeight;
 
@@ -3529,7 +3793,11 @@ public class MainProtocolProcesser implements Initializable {
 			return true;
 		}
 
+		/**
+		 * init pangpang game when start the game
+		 */
 		public void initPangPangWhenConditionStart() {
+			// use Thread control traffic
 			spriteAnimationThread = new Thread() {
 
 				Long lastNanoTime = new Long(System.nanoTime());
@@ -3609,6 +3877,9 @@ public class MainProtocolProcesser implements Initializable {
 			sendMessageInTheRoomPeople(Settings._ANSWER_PANGPANG_PLAY_START + "", Boolean.toString(true));
 		}
 
+		/**
+		 * init meteor game when game start
+		 */
 		public void initMeteorGameWhenConditionStart() {
 			Random rnd = new Random();
 
@@ -3703,6 +3974,12 @@ public class MainProtocolProcesser implements Initializable {
 			return roomClients.remove(client);
 		}
 
+		/**
+		 * count each player's destroy asteroid number
+		 * 
+		 * @param userName
+		 * @return
+		 */
 		public String setTheMeteriorDestroyClientScore(String userName) {
 			for (int i = 0; i < roomClients.size(); i++)
 				if (roomClients.get(i).getClientName().equals(userName))
@@ -3737,6 +4014,11 @@ public class MainProtocolProcesser implements Initializable {
 
 		}
 
+		/**
+		 * decrease pangpang enemy number
+		 * 
+		 * @param protocols
+		 */
 		public void decreasePangPangEnemyLife(String... protocols) {
 			for (int i = 0; i < Settings.nPangPangEnemyHeight; i++)
 				for (int j = 0; j < Settings.nPangPangEnemyWidth; j++)
@@ -3925,6 +4207,13 @@ public class MainProtocolProcesser implements Initializable {
 				}
 		}
 
+		/**
+		 * game room message validation check for whisper and another
+		 * 
+		 * @param client
+		 * @param sMessageProtocol
+		 * @return
+		 */
 		private boolean gameRoomMessageValidCheck(Client client, String[] sMessageProtocol) {
 
 			if (sMessageProtocol.length <= 2) {
@@ -4335,6 +4624,11 @@ public class MainProtocolProcesser implements Initializable {
 
 		}
 
+		/**
+		 * check meteor game finish condithion
+		 * 
+		 * @param packet
+		 */
 		private void checkTheMeteorGameFinishCondition(String[] packet) {
 			increaseReceiveFinishEventCount();
 
@@ -4346,6 +4640,12 @@ public class MainProtocolProcesser implements Initializable {
 			}
 		}
 
+		/**
+		 * update database system -win for pangpang
+		 * 
+		 * @param sIdName
+		 * @param score
+		 */
 		public void setTheClientScoreAboutPangPangGameWin(String sIdName, int score) {
 			ResultSet rs;
 			String query;
@@ -4384,6 +4684,9 @@ public class MainProtocolProcesser implements Initializable {
 
 		}
 
+		/**
+		 * update database system -defeat for pangpang
+		 */
 		public void setTheClientScoreAboutPangPangGameDefeat() {
 
 			String query;
@@ -4405,6 +4708,11 @@ public class MainProtocolProcesser implements Initializable {
 
 		}
 
+		/**
+		 * set the score about meteor game
+		 * 
+		 * @param sWinnerId
+		 */
 		private void setTheClientScoreAboutMeteorGame(String sWinnerId) {
 
 			String query;
@@ -4555,10 +4863,18 @@ public class MainProtocolProcesser implements Initializable {
 					+ this.getGameType() + " Make Time : " + this.getMakeTime();
 		}
 
+		/**
+		 * get receive finish event count using for meteor game
+		 * 
+		 * @return
+		 */
 		public int getnReceiveFinishEventCount() {
 			return nReceiveFinishEventCount;
 		}
 
+		/**
+		 * Increase receive finish count using for meteor game
+		 */
 		public void increaseReceiveFinishEventCount() {
 			this.nReceiveFinishEventCount++;
 		}
@@ -4671,6 +4987,11 @@ public class MainProtocolProcesser implements Initializable {
 			this.isAITicTacToc = isAITicTacToc;
 		}
 
+		/**
+		 * get clients in game room
+		 * 
+		 * @return
+		 */
 		public List<Client> getRoomClients() {
 			return roomClients;
 		}
@@ -4794,6 +5115,11 @@ public class MainProtocolProcesser implements Initializable {
 
 		}
 
+		/**
+		 * get unique serial room number
+		 * 
+		 * @return
+		 */
 		public long getnInitRoomNumber() {
 			return nInitRoomNumber;
 		}
