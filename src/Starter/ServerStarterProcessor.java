@@ -41,7 +41,7 @@ public class ServerStarterProcessor extends Application {
 
 		primaryStage.setScene(scene);
 		// set the window's width
-		primaryStage.setWidth(480);
+		primaryStage.setWidth(600);
 		// set the windows' height
 		primaryStage.setHeight(480);
 		// set the user can resize the window

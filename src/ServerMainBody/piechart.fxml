@@ -18,10 +18,10 @@
 			<TableView id="tableView" layoutX="20" layoutY="300"
 				prefHeight="75" prefWidth="445">
 				<columns>
-					<TableColumn prefWidth="143" resizable="false" text="게임 이름" />
-					<TableColumn prefWidth="100" resizable="false" text="승" />
-					<TableColumn prefWidth="100" resizable="false" text="패" />
-					<TableColumn prefWidth="100" resizable="false" text="시간" />
+					<TableColumn prefWidth="143" resizable="false" text="Game Name" />
+					<TableColumn prefWidth="100" resizable="false" text="Win" />
+					<TableColumn prefWidth="100" resizable="false" text="Defeat" />
+					<TableColumn prefWidth="100" resizable="false" text="Game Times" />
 				</columns>
 			</TableView>
 
@@ -29,8 +29,8 @@
 				prefHeight="75" prefWidth="445">
 				<columns>
 					<TableColumn prefWidth="128" resizable="false" text="ip" />
-					<TableColumn prefWidth="200" resizable="false" text="접속 시간" />
-					<TableColumn prefWidth="100" resizable="false" text="종류" />
+					<TableColumn prefWidth="200" resizable="false" text="Access time" />
+					<TableColumn prefWidth="100" resizable="false" text="sort" />
 				</columns>
 			</TableView>
 

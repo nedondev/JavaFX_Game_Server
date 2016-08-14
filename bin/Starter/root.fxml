@@ -22,12 +22,12 @@
 
 					</right>
 					<padding>
-						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+						<Insets bottom="10.0" left="80.0" right="10.0" top="10.0" />
 					</padding>
 				</BorderPane>
 			</top>
 
-			<HBox fx:id="boxb" layoutX="-10" layoutY="80">
+			<HBox fx:id="boxb" layoutX="50" layoutY="80">
 			</HBox>
 
 		</BorderPane>

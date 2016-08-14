@@ -4,8 +4,10 @@ package ServerMainBody;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,6 +21,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -260,6 +263,16 @@ public class MainProtocolProcesser implements Initializable {
 	 */
 	private long nTotalRoomNumber;
 
+	/**
+	 * date variable
+	 */
+	Date dt;
+
+	/**
+	 * change form date
+	 */
+	SimpleDateFormat sdf;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -269,6 +282,8 @@ public class MainProtocolProcesser implements Initializable {
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+		dt = new Date();
 		nTotalRoomNumber = 0;
 		isSudodeleteEventOccured = false;
 		isSudoIdDelete = false;
@@ -652,7 +667,23 @@ public class MainProtocolProcesser implements Initializable {
 
 				// processing log -saving function - log event time
 				case "log":
-					// textArea
+					if (isSudoIdLogin == true) {
+						switch (sCommandWords[1]) {
+						case "-write":
+
+							fileSetBuildingTime(textArea.getText(), sdf.format(dt) + Settings.nBuildingTimes);
+
+							Platform.runLater(
+									() -> displayText("write log data to " + sdf.format(dt) + ".log success"));
+							break;
+
+						default:
+							break;
+
+						}
+					} else
+						Platform.runLater(() -> displayText("you need to login using your sudo ID"));
+
 					break;
 
 				// user command <-- manage connection user
@@ -826,7 +857,7 @@ public class MainProtocolProcesser implements Initializable {
 
 						if (sSudoID.equals(sCommandWords[2]) && sSudoPassword.equals(sCommandWords[3])) {
 							isSudoIdLogin = true;
-							Platform.runLater(() -> displayText("Hello " + sSudoID));
+							Platform.runLater(() -> displayText("Hello sudo ID : " + sSudoID));
 						} else {
 							isSudoIdLogin = false;
 							Platform.runLater(() -> displayText("Fail to login "));
@@ -1122,6 +1153,31 @@ public class MainProtocolProcesser implements Initializable {
 	}
 
 	/**
+	 * write contents to file
+	 */
+	private void fileSetBuildingTime(String contents, String fileName) {
+
+		try {
+			File file = new File(fileName + ".log");
+
+			FileWriter fw = new FileWriter(file, false);
+
+			fw.write(contents);
+			fw.flush();
+
+			fw.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.out.println(fileName + ".log file do not exist");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
 	 * check invalid Shell parameter
 	 */
 	private void invalidShellParameter() {
@@ -1246,6 +1302,9 @@ public class MainProtocolProcesser implements Initializable {
 
 	// unCheck the warnings.
 	@SuppressWarnings({ "unchecked", "rawtypes" })
+	// packet chart view or data packet quantity.
+	// this part modify
+
 	private void handleTableViewMouseClicked(MouseEvent event) {
 		// if it is not double click event. this event is removed by next code
 		if (event.getClickCount() != 2) {
@@ -1309,7 +1368,7 @@ public class MainProtocolProcesser implements Initializable {
 						caption.setFont(new Font("Cambria", 10));
 
 						clientGameInformationlist = FXCollections.observableArrayList(client.getTicTacToc(),
-								client.getCatchMe());
+								client.getCatchMe(), client.getMeteor(), client.getPangPang());
 						TableColumn tc = tableView.getColumns().get(0);
 						tc.setCellValueFactory(new PropertyValueFactory("gameName"));
 						tc.setStyle("-fx-alignment: CENTER;");
@@ -1378,6 +1437,8 @@ public class MainProtocolProcesser implements Initializable {
 						dialog.setOnCloseRequest(e -> {
 							dialog.close();
 						});
+
+						break;
 
 					}
 				}
@@ -1473,7 +1534,7 @@ public class MainProtocolProcesser implements Initializable {
 	 * @param text
 	 */
 	void displayText(String text) {
-		textArea.appendText(text + "\n");
+		textArea.appendText(sdf.format(dt) + ">>" + text + "\n");
 	}
 
 	/**
@@ -2084,10 +2145,7 @@ public class MainProtocolProcesser implements Initializable {
 										sendPacket(Settings._ANSWER_LOGIN + "", true + "", getClientName());
 										AddQueryDataSet("S ANSWERLOGIN", getClientName().length() + 2);
 
-										java.util.Date dt = new java.util.Date();
-
-										java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(
-												"yyyy-MM-dd HH:mm:ss");
+										sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 										String currentTime = sdf.format(dt);
 										query = "INSERT INTO useripandaccess VALUE ('" + splitPacket[1] + "','"
@@ -2095,38 +2153,45 @@ public class MainProtocolProcesser implements Initializable {
 												+ "','" + "Start" + "')";
 										stmt.executeUpdate(query);
 
-										query = "SELECT win, defeat FROM catchme where id ='" + splitPacket[1] + "'";
+										query = "SELECT win, defeat, playtimes FROM catchme where id ='"
+												+ splitPacket[1] + "'";
 										rs = stmt.executeQuery(query);
 
 										while (rs.next()) {
 											getCatchMe().setWin(rs.getInt("win"));
 											getCatchMe().setDefeat(rs.getInt("defeat"));
+											getCatchMe().setPlayTimes(rs.getInt("playtimes"));
 										}
 
-										query = "SELECT win, defeat FROM tictactoc where id ='" + splitPacket[1] + "'";
+										query = "SELECT win, defeat, playtimes FROM tictactoc where id ='"
+												+ splitPacket[1] + "'";
 										rs = stmt.executeQuery(query);
 
 										while (rs.next()) {
 											getTicTacToc().setWin(rs.getInt("win"));
 											getTicTacToc().setDefeat(rs.getInt("defeat"));
+											getTicTacToc().setPlayTimes(rs.getInt("playtimes"));
 										}
 
-										query = "SELECT win, defeat FROM meteor where id ='" + splitPacket[1] + "'";
+										query = "SELECT win, defeat, playtimes FROM meteor where id ='" + splitPacket[1]
+												+ "'";
 										rs = stmt.executeQuery(query);
 
 										while (rs.next()) {
 											getMeteor().setWin(rs.getInt("win"));
 											getMeteor().setDefeat(rs.getInt("defeat"));
+											getMeteor().setPlayTimes(rs.getInt("playtimes"));
 										}
 
-										query = "SELECT win, defeat, score FROM pangpang where id ='" + splitPacket[1]
-												+ "'";
+										query = "SELECT win, defeat, score, playtimes FROM pangpang where id ='"
+												+ splitPacket[1] + "'";
 										rs = stmt.executeQuery(query);
 
 										while (rs.next()) {
 											getPangPang().setWin(rs.getInt("win"));
 											getPangPang().setDefeat(rs.getInt("defeat"));
 											getPangPang().setScore(rs.getInt("score"));
+											getPangPang().setPlayTimes(rs.getInt("playtimes"));
 										}
 
 										writeOnTheBoard(protocol, splitPacket);
@@ -2197,10 +2262,7 @@ public class MainProtocolProcesser implements Initializable {
 								// request the client logout
 								case Settings._REQUEST_LOGOUT:
 									try {
-										java.util.Date dt = new java.util.Date();
-
-										java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(
-												"yyyy-MM-dd HH:mm:ss");
+										sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 										String currentTime = sdf.format(dt);
 										query = "INSERT INTO useripandaccess VALUE ('" + getClientName() + "','"
@@ -2227,10 +2289,7 @@ public class MainProtocolProcesser implements Initializable {
 
 									try {
 										if (isRename()) {
-											java.util.Date dt = new java.util.Date();
-
-											java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(
-													"yyyy-MM-dd HH:mm:ss");
+											sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 											String currentTime = sdf.format(dt);
 											query = "INSERT INTO useripandaccess VALUE ('" + getClientName() + "','"
@@ -2488,10 +2547,7 @@ public class MainProtocolProcesser implements Initializable {
 										sendPacket(Settings._ANSWER_LOGIN + "", true + "");
 										AddQueryDataSet("S ANSWERLOGIN", getClientName().length() + 2);
 
-										java.util.Date dt = new java.util.Date();
-
-										java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(
-												"yyyy-MM-dd HH:mm:ss");
+										sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 										String currentTime = sdf.format(dt);
 										query = "INSERT INTO useripandaccess VALUE ('" + splitPacket[1] + "','"
@@ -3742,11 +3798,13 @@ public class MainProtocolProcesser implements Initializable {
 			} else if (Settings.nGameTicTacToc == getGameType()) {
 				for (Client client : roomClients) {
 					String query;
+					System.out.println(client.getTicTacToc().getPlayTimes());
 					client.getTicTacToc().setPlayTimes(client.getTicTacToc().getPlayTimes() + 1);
 
 					try {
 						query = "update tictactoc set playtimes =" + client.getTicTacToc().getPlayTimes()
 								+ " where id='" + client.getClientName() + "'";
+						System.out.println(client.getTicTacToc().getPlayTimes() + " testing");
 						stmt.executeUpdate(query);
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
