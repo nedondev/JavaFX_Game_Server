@@ -671,6 +671,8 @@ public class MainProtocolProcesser implements Initializable {
 						switch (sCommandWords[1]) {
 						case "-write":
 
+							dt = new Date();
+							sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 							fileSetBuildingTime(textArea.getText(), sdf.format(dt) + Settings.nBuildingTimes);
 
 							Platform.runLater(
@@ -1046,7 +1048,21 @@ public class MainProtocolProcesser implements Initializable {
 									String playtime = rs.getString("playtimes");
 
 									Platform.runLater(() -> displayText(
-											"catchme win:" + win + " defeat:" + defeat + " playtime:" + playtime));
+											"meteor win:" + win + " defeat:" + defeat + " playtime:" + playtime));
+								}
+
+								query = "SELECT id,win,defeat,playtimes FROM pangpang where id='" + sCommandWords[2]
+										+ "'";
+
+								rs = stmt.executeQuery(query);
+
+								while (rs.next()) {
+									String win = rs.getString("win");
+									String defeat = rs.getString("defeat");
+									String playtime = rs.getString("playtimes");
+
+									Platform.runLater(() -> displayText(
+											"pangpang win:" + win + " defeat:" + defeat + " playtime:" + playtime));
 								}
 
 							} else
@@ -1114,7 +1130,7 @@ public class MainProtocolProcesser implements Initializable {
 						break;
 
 					case "-room":
-						//MakeGameRoom();
+						// MakeGameRoom();
 						break;
 
 					default:
@@ -1130,7 +1146,7 @@ public class MainProtocolProcesser implements Initializable {
 						break;
 
 					case "-room":
-						//DeleteGameRoom();
+						// DeleteGameRoom();
 						break;
 
 					default:
