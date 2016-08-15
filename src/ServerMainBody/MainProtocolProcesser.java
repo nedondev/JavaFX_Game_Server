@@ -1114,6 +1114,7 @@ public class MainProtocolProcesser implements Initializable {
 						break;
 
 					case "-room":
+						//MakeGameRoom();
 						break;
 
 					default:
@@ -1129,6 +1130,7 @@ public class MainProtocolProcesser implements Initializable {
 						break;
 
 					case "-room":
+						//DeleteGameRoom();
 						break;
 
 					default:
@@ -4519,14 +4521,6 @@ public class MainProtocolProcesser implements Initializable {
 					} else {
 						nWeightTictactocBoard[i][j] = Settings.ERRORCODE;
 					}
-			//
-			// this comments can show the AI multiple sets
-			// System.out.println();
-			// for (int j = 0; j < Settings.TICTACTOCBLOCKHEIGHT; j++) {
-			// for (int i = 0; i < Settings.TICTACTOCBLOCKWIDTH; i++)
-			// System.out.print(nWeightTictactocBoard[i][j] + " ");
-			// System.out.println();
-			// }
 
 			float temp = -1;
 

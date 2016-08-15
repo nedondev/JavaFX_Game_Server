@@ -677,7 +677,7 @@ public class Settings {
 	/**
 	 * total Asteroid number of universeGame
 	 */
-	public static final int nSettingAsteroidNumber = 100;
+	public static final int nSettingAsteroidNumber = 300;
 
 	/**
 	 * Asteroid Game and PangPang Game Maximum windows width
