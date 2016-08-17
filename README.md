@@ -14,11 +14,13 @@ if you want to use this server.
 
 you must follow below steps.
 
->1. install mysql. and remember root password.
+>1. Install mysql. and remember root password.
 >
->2. set the password in logincontoller.
+>2. Download project from git. and place this project in C:\Users\username\workspace
 >
->3. build this server. (this server is optimized for https://github.com/jrcforever/JavaFX_Game_Client. so if you want to test this server. then I recommand you to install the client.)
+>3. Set the password about databaseSystem password in Setting.sDatabaseSystemPassword.
+>
+>4. Build this server. (this server is optimized for https://github.com/jrcforever/JavaFX_Game_Client. so if you want to test this server. then I recommand you to install the client.)
 
 <br></br>
 Demo 1.0.0v
