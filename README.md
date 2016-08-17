@@ -23,12 +23,12 @@ you must follow below steps.
 <br></br>
 Demo 1.0.0v
 ---
-[![Demo CountPages alpha](https://j.gifs.com/0RN9BX.gif)](https://www.youtube.com/watch?v=FL4wDB9cNoI)
+[![Demo CountPages alpha](https://j.gifs.com/QWpQMq.gif)](https://www.youtube.com/watch?v=FL4wDB9cNoI)
 
 <br></br>
 Demo 2.0.0v
 ---
-[![Demo CountPages alpha](https://j.gifs.com/Krj0qz.gif)](https://youtu.be/nsrxQKbuJUc?list=PL0bFPqEKbn-HNJvNN4sN0yYNrqEZ5iJzK)
+[![Demo CountPages alpha](https://j.gifs.com/Krj0qz.gif)](https://www.youtube.com/watch?v=nsrxQKbuJUc&feature=youtu.be&list=PL0bFPqEKbn-HNJvNN4sN0yYNrqEZ5iJzK)
 
 
 <br></br>
