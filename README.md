@@ -26,12 +26,12 @@ you must follow below steps.
 Demo 1.0.0v
 ---
 [![Demo CountPages alpha](https://j.gifs.com/QWpQMq.gif)](https://www.youtube.com/watch?v=FL4wDB9cNoI)
-
+######if you want to see the video, click gif image
 <br></br>
 Demo 2.0.0v
 ---
 [![Demo CountPages alpha](https://j.gifs.com/Krj0qz.gif)](https://www.youtube.com/watch?v=nsrxQKbuJUc&feature=youtu.be&list=PL0bFPqEKbn-HNJvNN4sN0yYNrqEZ5iJzK)
-
+######if you want to see the video, click gif image
 
 <br></br>
 Step contribution
