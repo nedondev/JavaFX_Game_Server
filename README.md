@@ -23,12 +23,12 @@ you must follow below steps.
 >4. Build this server. (this server is optimized for https://github.com/jrcforever/JavaFX_Game_Client. so if you want to test this server. then I recommand you to install the client.)
 
 <br></br>
-Demo 1.0.0v
+Demo 1.0.0v ( 2016. 02. 18 )
 ---
 [![Demo CountPages alpha](https://j.gifs.com/QWpQMq.gif)](https://www.youtube.com/watch?v=FL4wDB9cNoI)
 ######if you want to see the video, click gif image
 <br></br>
-Demo 2.0.0v
+Demo 2.0.0v ( 2016. 08. 15 )
 ---
 [![Demo CountPages alpha](https://j.gifs.com/Krj0qz.gif)](https://www.youtube.com/watch?v=nsrxQKbuJUc&feature=youtu.be&list=PL0bFPqEKbn-HNJvNN4sN0yYNrqEZ5iJzK)
 ######if you want to see the video, click gif image
