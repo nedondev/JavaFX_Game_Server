@@ -14,7 +14,7 @@ if you want to use this server.
 
 you must follow below steps.
 
->1. Install mysql. and remember root password.
+>1. Install mysql.(MySQL Community Server 5.5.51) and remember root password.
 >
 >2. Download project from git. and place this project in C:\Users\username\workspace
 >
