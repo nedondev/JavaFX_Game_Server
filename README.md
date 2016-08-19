@@ -43,6 +43,13 @@ Step contribution
 3.Perform a pull request in github's web interface or sourcetree interface.
 
 <br></br>
+Related project
+---
+["**JavaFx_Game_Client**"](https://github.com/jrcforever/JavaFX_Game_Client)
+["**JavaFx_Game_Mobile**"](https://github.com/jrcforever/JavaFX_Game_Mobile)
+  
+  
+<br></br>
 Contact
 ---
 if you have a question or curious something. if so, Don't hesitate to send to me a e-mail at <jrcright1004@gmail.com>. 
