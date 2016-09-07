@@ -20,7 +20,7 @@ you must follow below steps.
 >
 >3. Set the password about databaseSystem password in Setting.sDatabaseSystemPassword.
 >
->4. Build this server. (this server is optimized for https://github.com/jrcforever/JavaFX_Game_Client. so if you want to test this server. then I recommand you to install the client.)
+>4. Build this server. (this server is optimized for https://github.com/jrcforever/JavaFX_Game_Client. so if you want to test this server. then also I recommands you to install the client project.)
 
 <br></br>
 Demo 1.0.0v ( 2016. 02. 18 )
