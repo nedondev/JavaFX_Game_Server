@@ -12,10 +12,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -1552,6 +1554,9 @@ public class MainProtocolProcesser implements Initializable {
 	 * @param text
 	 */
 	void displayText(String text) {
+		sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+		dt = new Date();
+
 		textArea.appendText(sdf.format(dt) + ">>" + text + "\n");
 	}
 
@@ -1613,11 +1618,25 @@ public class MainProtocolProcesser implements Initializable {
 		Runnable runnable = new Runnable() {
 			@Override
 			public void run() {
-				Platform.runLater(() -> {
-					displayText("[¼­¹ö ½ÃÀÛ]");
-					btnStartStop.setText("stop");
+				InetAddress serverIp;
+				try {
+					serverIp = InetAddress.getLocalHost();
 
-				});
+					Platform.runLater(() -> {
+						textArea.clear();
+						displayText("[Start Server]");
+						displayText("[Server Name] " + serverIp.getHostName());
+						displayText("[Server Ip] " + serverIp.getHostAddress());
+						displayText("[Server Port] " + serverSocket.getLocalPort());
+
+						btnStartStop.setText("stop");
+
+					});
+
+				} catch (UnknownHostException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				while (true) {
 					try {
 						Socket socket = serverSocket.accept();
@@ -1712,7 +1731,7 @@ public class MainProtocolProcesser implements Initializable {
 			this.cleanTheList();
 
 			Platform.runLater(() -> {
-				displayText("[¼­¹ö ¸ØÃã]");
+				displayText("[Stop Server]");
 				btnStartStop.setText("start");
 				unableServerTextEdit();
 			});
