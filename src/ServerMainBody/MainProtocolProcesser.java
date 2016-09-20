@@ -1966,8 +1966,12 @@ public class MainProtocolProcesser implements Initializable {
 
 							String data = new String(byteArr, 0, readByteCount, "UTF-8");
 
-							String[] multiplePackets = SplitPacketManager
-									.splitMultiplePacket(EncryptionManager.decrypt64bits(data));
+							String[] multiplePackets;
+							if (Settings.isTurnOnEncryption)
+								multiplePackets = SplitPacketManager
+										.splitMultiplePacket(EncryptionManager.decrypt64bits(data));
+							else
+								multiplePackets = SplitPacketManager.splitMultiplePacket(data);
 
 							for (int ik = 0; ik < multiplePackets.length; ik++) {
 
@@ -2080,6 +2084,8 @@ public class MainProtocolProcesser implements Initializable {
 
 									sMessageProtocol[0] = sMessageProtocol[0].toLowerCase();
 
+									System.out.println(sMessageProtocol[0]);
+									
 									if (sMessageProtocol[0].equals("-info")) {
 
 										if (false == waitingRoomMessageValidCheck(sMessageProtocol))
@@ -2399,9 +2405,9 @@ public class MainProtocolProcesser implements Initializable {
 									for (int i = 0; i < gameRooms.size(); i++)
 										if (gameRooms.get(i).getnInitRoomNumber() == Long.parseLong(splitPacket[1])) {
 											if (Settings.isGamePrepareStart == Boolean.parseBoolean(splitPacket[2]))
-												_meassage = "게임 시작 준비를 완료하였습니다.";
+												_meassage = "complate game ready.";
 											else
-												_meassage = "게임 시작 준비를 취소하였습니다.";
+												_meassage = "cancel the game ready.";
 
 											gameRooms.get(i).sendMessageInTheRoomPeople(
 													Settings._ANSWER_ROOM_MEMEBER_MESSAGE + "", _meassage,
@@ -3085,7 +3091,12 @@ public class MainProtocolProcesser implements Initializable {
 				@Override
 				public void run() {
 					try {
-						byte[] byteArr = EncryptionManager.encrypt64bits(data).getBytes("UTF-8");
+
+						byte[] byteArr;
+						if (Settings.isTurnOnEncryption)
+							byteArr = EncryptionManager.encrypt64bits(data).getBytes("UTF-8");
+						else
+							byteArr = data.getBytes();
 						OutputStream outputStream = socket.getOutputStream();
 						outputStream.write(byteArr);
 						outputStream.flush();

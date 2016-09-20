@@ -722,7 +722,7 @@ public class Settings {
 	/**
 	 * 64bits encrypt key for AES
 	 */
-	public static final String keyStr = "Z8LSq0wWwB5v+6YJzurcP463H3F12iZh74fDj4S74oUH4EONkiKb2FmiWUbtFh97GG/c/lbDE47mvw6j94yXxKHOpoqu6zpLKMKPcOoSppcVWb2q34qENBJkudXUh4MWcreondLmLL2UyydtFKuU9Sa5VgY/CzGaVGJABK2ZR94=";
+	public static final String keyStr = "Z8LSq0wWwB5v+6YJzurcP463H3F12iZh74fDj4S74oUH4EONkiKb2FmiWUbtFh97GG/c/lbDE47mvw6j94yXxKHOpoqu6zpLKMKPcOoSppcVWb2q34qENBJkudXUh4MWcreondLmLL2UyydtFKuU9Sa5VgY/CzGaVGJABK2ZR94/";
 
 	/**
 	 * maximum receive buffer size
@@ -772,32 +772,32 @@ public class Settings {
 	/**
 	 * packet sending split token
 	 */
-	public static final String sSenderSplitProtocolToken = "/&";
+	public static final String sSenderSplitProtocolToken = "c/a";
 
 	/**
 	 * packet receive split token
 	 */
-	public static final String sReceiverSplitProtocolToken = "/&&";
+	public static final String sReceiverSplitProtocolToken = "/ac";
 
 	/**
 	 * packet split sending multiple token
 	 */
-	public static final String sSenderSplitMultipleToken = "@";
+	public static final String sSenderSplitMultipleToken = "k/";
 
 	/**
 	 * packet split receive multiple token
 	 */
-	public static final String sReceiverSplitMultipleToken = "@";
+	public static final String sReceiverSplitMultipleToken = "/k";
 
 	/**
 	 * pangapng position information token
 	 */
-	public static final String sPangPangPositionInformationWordToken = "!!";
+	public static final String sPangPangPositionInformationWordToken = "a/a";
 
 	/**
 	 * pangpang position coordinator token
 	 */
-	public static final String sPangPangPositionCoordinationToken = ">!";
+	public static final String sPangPangPositionCoordinationToken = "b/b";
 
 	/**
 	 * pangpang main player height
@@ -834,8 +834,10 @@ public class Settings {
 	 */
 	public static final String sPangPangEnemyName = "PangPangEnemy";
 
+	public static final boolean isTurnOnEncryption = false;
+	
 	/**
 	 * pangapng enemy total attack number
 	 */
-	public static final int nTotalPangPangEnemyAttackWhenThisNumber = 10;
+	public static final int nTotalPangPangEnemyAttackWhenThisNumber = 5;
 }
