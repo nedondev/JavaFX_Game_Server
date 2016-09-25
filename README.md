@@ -33,9 +33,10 @@ Demo 2.0.0v ( 2016. 08. 15 )
 [![Demo CountPages alpha](https://j.gifs.com/Krj0qz.gif)](https://www.youtube.com/watch?v=nsrxQKbuJUc&feature=youtu.be&list=PL0bFPqEKbn-HNJvNN4sN0yYNrqEZ5iJzK)
 ######if you want to see the video, click gif image
 <br></br>
-Demo 3.0.0v ( Coming soon )
+Demo 3.0.0v
 ---
-
+[![Demo CountPages alpha](https://j.gifs.com/73GVOB.gif)](https://www.youtube.com/watch?v=fykKL4AhOC4&feature=youtu.be)
+######if you want to see the video, click gif image
 
 <br></br>
 Step contribution
