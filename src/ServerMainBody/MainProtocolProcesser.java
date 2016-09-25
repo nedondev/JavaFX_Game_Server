@@ -2085,7 +2085,7 @@ public class MainProtocolProcesser implements Initializable {
 									sMessageProtocol[0] = sMessageProtocol[0].toLowerCase();
 
 									System.out.println(sMessageProtocol[0]);
-									
+
 									if (sMessageProtocol[0].equals("-info")) {
 
 										if (false == waitingRoomMessageValidCheck(sMessageProtocol))
@@ -3041,7 +3041,15 @@ public class MainProtocolProcesser implements Initializable {
 		 * @param gameRooms
 		 */
 		public void sendRoomListPacket(int protocol, List<GameRoom> gameRooms) {
+
 			String packet = new String();
+
+			/*
+			 * String message = "[ " + protocol + " 그룹 패킷 요청 처리 완료: " +
+			 * socket.getRemoteSocketAddress() + ": " +
+			 * Thread.currentThread().getName() + "]"; Platform.runLater(() ->
+			 * displayText(message));
+			 */
 			int partitionPacketNumber = 0;
 
 			for (int i = 0; i < gameRooms.size(); i++)
@@ -3068,6 +3076,12 @@ public class MainProtocolProcesser implements Initializable {
 		 * @param datas
 		 */
 		public void sendPacket(String... datas) {
+			/*
+			 * String message = "[ " + datas[0] + " 요청 처리 완료: " +
+			 * socket.getRemoteSocketAddress() + ": " +
+			 * Thread.currentThread().getName() + "]"; Platform.runLater(() ->
+			 * displayText(message));
+			 */
 			String packet = new String();
 
 			packet = packet.concat(Settings.sSenderSplitProtocolToken);
