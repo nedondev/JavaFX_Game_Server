@@ -56,7 +56,7 @@ Related project
 <br></br>
 Contributor
 ---
-LOGO Designer : Im Jaeseong
+LOGO Designer : Jaeseong Im
 
 <br></br>
 Contact
