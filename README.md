@@ -53,7 +53,11 @@ Related project
 ["**JavaFx_Game_Client**"](https://github.com/jrcforever/JavaFX_Game_Client)
 ["**JavaFx_Game_Mobile**"](https://github.com/jrcforever/JavaFX_Game_Mobile)
   
-  
+<br></br>
+Contributor
+---
+LOGO Designer : Im Jaeseong
+
 <br></br>
 Contact
 ---
