@@ -4376,210 +4376,21 @@ public class MainProtocolProcesser implements Initializable {
 
 			int _x = 0, _y = 0;
 
+			int _nGameStyle = 0;
+
 			ArrayList<TicTacTocPoint> _selectTag = new ArrayList<TicTacTocPoint>();
 
 			for (int i = 0; i < Settings.nTicTacTocBlockWidth; i++)
 				for (int j = 0; j < Settings.nTicTacTocBlockHeight; j++)
-					if (tictactocBoardStatues[i][j] == Settings.ERRORCODE) {
-						nWeightTictactocBoard[i][j] = 0;
-
-						// 위
-						_weight = Settings.nAiTicTacTocEnemyInitWeight;
-						for (int y = j - 1;; y--) {
-							if (y < 0)
-								break;
-							if (tictactocBoardStatues[i][y] == roomClients.get(0).getClientGameTag()) {
-								nWeightTictactocBoard[i][j] += _weight;
-								_weight++;
-							} else
-								break;
-						}
-
-						// 왼쪽 위 대각선
-						_weight = Settings.nAiTicTacTocEnemyInitWeight;
-						for (int x = i - 1, y = j - 1;; x--, y--) {
-							if (x < 0)
-								break;
-							if (y < 0)
-								break;
-							if (tictactocBoardStatues[x][y] == roomClients.get(0).getClientGameTag()) {
-								nWeightTictactocBoard[i][j] += _weight;
-								_weight++;
-							} else
-								break;
-						}
-
-						// 왼쪽
-						_weight = Settings.nAiTicTacTocEnemyInitWeight;
-						for (int x = i - 1;; x--) {
-							if (x < 0)
-								break;
-							if (tictactocBoardStatues[x][j] == roomClients.get(0).getClientGameTag()) {
-								nWeightTictactocBoard[i][j] += _weight;
-								_weight++;
-							} else
-								break;
-						}
-
-						// 왼쪽 아래 대각선
-						_weight = Settings.nAiTicTacTocEnemyInitWeight;
-						for (int x = i - 1, y = j + 1;; x--, y++) {
-							if (x < 0)
-								break;
-							if (y >= Settings.nTicTacTocBlockHeight)
-								break;
-							if (tictactocBoardStatues[x][y] == roomClients.get(0).getClientGameTag()) {
-								nWeightTictactocBoard[i][j] += _weight;
-								_weight++;
-							} else
-								break;
-						}
-
-						// 아래쪽
-						_weight = Settings.nAiTicTacTocEnemyInitWeight;
-						for (int y = j + 1;; y++) {
-							if (y >= Settings.nTicTacTocBlockHeight)
-								break;
-							if (tictactocBoardStatues[i][y] == roomClients.get(0).getClientGameTag()) {
-								nWeightTictactocBoard[i][j] += _weight;
-								_weight++;
-							} else
-								break;
-						}
-
-						// 오른쪽 아래 대각선
-						_weight = Settings.nAiTicTacTocEnemyInitWeight;
-						for (int x = i + 1, y = j + 1;; x++, y++) {
-							if (x >= Settings.nTicTacTocBlockWidth)
-								break;
-							if (y >= Settings.nTicTacTocBlockHeight)
-								break;
-							if (tictactocBoardStatues[x][y] == roomClients.get(0).getClientGameTag()) {
-								nWeightTictactocBoard[i][j] += _weight;
-								_weight++;
-							} else
-								break;
-						}
-
-						// 오른쪽
-						_weight = Settings.nAiTicTacTocEnemyInitWeight;
-						for (int x = i + 1;; x++) {
-							if (x >= Settings.nTicTacTocBlockWidth)
-								break;
-							if (tictactocBoardStatues[x][j] == roomClients.get(0).getClientGameTag()) {
-								nWeightTictactocBoard[i][j] += _weight;
-								_weight++;
-							} else
-								break;
-						}
-
-						// 오른쪽 위 대각선
-						_weight = Settings.nAiTicTacTocEnemyInitWeight;
-						for (int x = i + 1, y = j - 1;; x++, y--) {
-							if (x >= Settings.nTicTacTocBlockWidth)
-								break;
-							if (y < 0)
-								break;
-							if (tictactocBoardStatues[x][y] == roomClients.get(0).getClientGameTag()) {
-								nWeightTictactocBoard[i][j] += _weight;
-								_weight++;
-							} else
-								break;
-						}
-
-						if (isAITicTacToc()) {
-							// 위 AI
-							for (int y = j - 1;; y--) {
-								if (y < 0)
-									break;
-								if (tictactocBoardStatues[i][y] == Settings.nComputerAiTagNumber) {
-									nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
-								} else
-									break;
-							}
-
-							// 왼쪽 위 대각선 AI
-							for (int x = i - 1, y = j - 1;; x--, y--) {
-								if (x < 0)
-									break;
-								if (y < 0)
-									break;
-								if (tictactocBoardStatues[x][y] == Settings.nComputerAiTagNumber) {
-									nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
-								} else
-									break;
-							}
-
-							// 왼쪽 AI
-							for (int x = i - 1;; x--) {
-								if (x < 0)
-									break;
-								if (tictactocBoardStatues[x][j] == Settings.nComputerAiTagNumber) {
-									nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
-								} else
-									break;
-							}
-
-							// 왼쪽 아래 대각선 AI
-							for (int x = i - 1, y = j + 1;; x--, y++) {
-								if (x < 0)
-									break;
-								if (y >= Settings.nTicTacTocBlockHeight)
-									break;
-								if (tictactocBoardStatues[x][y] == Settings.nComputerAiTagNumber) {
-									nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
-								} else
-									break;
-							}
-
-							// 아래쪽 AI
-							for (int y = j + 1;; y++) {
-								if (y >= Settings.nTicTacTocBlockHeight)
-									break;
-								if (tictactocBoardStatues[i][y] == Settings.nComputerAiTagNumber) {
-									nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
-								} else
-									break;
-							}
-
-							// 오른쪽 아래 대각선 AI
-							for (int x = i + 1, y = j + 1;; x++, y++) {
-								if (x >= Settings.nTicTacTocBlockWidth)
-									break;
-								if (y >= Settings.nTicTacTocBlockHeight)
-									break;
-								if (tictactocBoardStatues[x][y] == Settings.nComputerAiTagNumber) {
-									nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
-								} else
-									break;
-							}
-
-							// 오른쪽 AI
-							for (int x = i + 1;; x++) {
-								if (x >= Settings.nTicTacTocBlockWidth)
-									break;
-								if (tictactocBoardStatues[x][j] == Settings.nComputerAiTagNumber) {
-									nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
-								} else
-									break;
-							}
-
-							// 오른쪽 위 대각선 AI
-							for (int x = i + 1, y = j - 1;; x++, y--) {
-								if (x >= Settings.nTicTacTocBlockWidth)
-									break;
-								if (y < 0)
-									break;
-								if (tictactocBoardStatues[x][y] == Settings.nComputerAiTagNumber) {
-									nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
-									_weight++;
-								} else
-									break;
-							}
-						}
-
-					} else {
-						nWeightTictactocBoard[i][j] = Settings.ERRORCODE;
+					switch (_nGameStyle) {
+					case 0:
+						basic_tictactoc_algorithm(nWeightTictactocBoard, i, j);
+						break;
+					case 1:
+						perfect_tictactoc_algorithm(nWeightTictactocBoard, i, j);
+						break;
+					default:
+						break;
 					}
 
 			float temp = -1;
@@ -4608,6 +4419,215 @@ public class MainProtocolProcesser implements Initializable {
 			roomClients.get(0).sendPacket(Settings._ANSWER_TICTACTOC_AI + "", "Computer AI",
 					_selectTag.get(_selectTheTag).getX() + "", _selectTag.get(_selectTheTag).getY() + "", true + "",
 					Settings.nComputerAiTagNumber + "");
+		}
+
+		private void perfect_tictactoc_algorithm(float[][] nWeightTictactocBoard, int i, int j) {
+			//perfect_tictactoc_algorithm body part
+		}
+
+		private void basic_tictactoc_algorithm(float[][] nWeightTictactocBoard, int i, int j) {
+			int _weight;
+			if (tictactocBoardStatues[i][j] == Settings.ERRORCODE) {
+				nWeightTictactocBoard[i][j] = 0;
+
+				// 위
+				_weight = Settings.nAiTicTacTocEnemyInitWeight;
+				for (int y = j - 1;; y--) {
+					if (y < 0)
+						break;
+					if (tictactocBoardStatues[i][y] == roomClients.get(0).getClientGameTag()) {
+						nWeightTictactocBoard[i][j] += _weight;
+						_weight++;
+					} else
+						break;
+				}
+
+				// 왼쪽 위 대각선
+				_weight = Settings.nAiTicTacTocEnemyInitWeight;
+				for (int x = i - 1, y = j - 1;; x--, y--) {
+					if (x < 0)
+						break;
+					if (y < 0)
+						break;
+					if (tictactocBoardStatues[x][y] == roomClients.get(0).getClientGameTag()) {
+						nWeightTictactocBoard[i][j] += _weight;
+						_weight++;
+					} else
+						break;
+				}
+
+				// 왼쪽
+				_weight = Settings.nAiTicTacTocEnemyInitWeight;
+				for (int x = i - 1;; x--) {
+					if (x < 0)
+						break;
+					if (tictactocBoardStatues[x][j] == roomClients.get(0).getClientGameTag()) {
+						nWeightTictactocBoard[i][j] += _weight;
+						_weight++;
+					} else
+						break;
+				}
+
+				// 왼쪽 아래 대각선
+				_weight = Settings.nAiTicTacTocEnemyInitWeight;
+				for (int x = i - 1, y = j + 1;; x--, y++) {
+					if (x < 0)
+						break;
+					if (y >= Settings.nTicTacTocBlockHeight)
+						break;
+					if (tictactocBoardStatues[x][y] == roomClients.get(0).getClientGameTag()) {
+						nWeightTictactocBoard[i][j] += _weight;
+						_weight++;
+					} else
+						break;
+				}
+
+				// 아래쪽
+				_weight = Settings.nAiTicTacTocEnemyInitWeight;
+				for (int y = j + 1;; y++) {
+					if (y >= Settings.nTicTacTocBlockHeight)
+						break;
+					if (tictactocBoardStatues[i][y] == roomClients.get(0).getClientGameTag()) {
+						nWeightTictactocBoard[i][j] += _weight;
+						_weight++;
+					} else
+						break;
+				}
+
+				// 오른쪽 아래 대각선
+				_weight = Settings.nAiTicTacTocEnemyInitWeight;
+				for (int x = i + 1, y = j + 1;; x++, y++) {
+					if (x >= Settings.nTicTacTocBlockWidth)
+						break;
+					if (y >= Settings.nTicTacTocBlockHeight)
+						break;
+					if (tictactocBoardStatues[x][y] == roomClients.get(0).getClientGameTag()) {
+						nWeightTictactocBoard[i][j] += _weight;
+						_weight++;
+					} else
+						break;
+				}
+
+				// 오른쪽
+				_weight = Settings.nAiTicTacTocEnemyInitWeight;
+				for (int x = i + 1;; x++) {
+					if (x >= Settings.nTicTacTocBlockWidth)
+						break;
+					if (tictactocBoardStatues[x][j] == roomClients.get(0).getClientGameTag()) {
+						nWeightTictactocBoard[i][j] += _weight;
+						_weight++;
+					} else
+						break;
+				}
+
+				// 오른쪽 위 대각선
+				_weight = Settings.nAiTicTacTocEnemyInitWeight;
+				for (int x = i + 1, y = j - 1;; x++, y--) {
+					if (x >= Settings.nTicTacTocBlockWidth)
+						break;
+					if (y < 0)
+						break;
+					if (tictactocBoardStatues[x][y] == roomClients.get(0).getClientGameTag()) {
+						nWeightTictactocBoard[i][j] += _weight;
+						_weight++;
+					} else
+						break;
+				}
+
+				if (isAITicTacToc()) {
+					// 위 AI
+					for (int y = j - 1;; y--) {
+						if (y < 0)
+							break;
+						if (tictactocBoardStatues[i][y] == Settings.nComputerAiTagNumber) {
+							nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
+						} else
+							break;
+					}
+
+					// 왼쪽 위 대각선 AI
+					for (int x = i - 1, y = j - 1;; x--, y--) {
+						if (x < 0)
+							break;
+						if (y < 0)
+							break;
+						if (tictactocBoardStatues[x][y] == Settings.nComputerAiTagNumber) {
+							nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
+						} else
+							break;
+					}
+
+					// 왼쪽 AI
+					for (int x = i - 1;; x--) {
+						if (x < 0)
+							break;
+						if (tictactocBoardStatues[x][j] == Settings.nComputerAiTagNumber) {
+							nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
+						} else
+							break;
+					}
+
+					// 왼쪽 아래 대각선 AI
+					for (int x = i - 1, y = j + 1;; x--, y++) {
+						if (x < 0)
+							break;
+						if (y >= Settings.nTicTacTocBlockHeight)
+							break;
+						if (tictactocBoardStatues[x][y] == Settings.nComputerAiTagNumber) {
+							nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
+						} else
+							break;
+					}
+
+					// 아래쪽 AI
+					for (int y = j + 1;; y++) {
+						if (y >= Settings.nTicTacTocBlockHeight)
+							break;
+						if (tictactocBoardStatues[i][y] == Settings.nComputerAiTagNumber) {
+							nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
+						} else
+							break;
+					}
+
+					// 오른쪽 아래 대각선 AI
+					for (int x = i + 1, y = j + 1;; x++, y++) {
+						if (x >= Settings.nTicTacTocBlockWidth)
+							break;
+						if (y >= Settings.nTicTacTocBlockHeight)
+							break;
+						if (tictactocBoardStatues[x][y] == Settings.nComputerAiTagNumber) {
+							nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
+						} else
+							break;
+					}
+
+					// 오른쪽 AI
+					for (int x = i + 1;; x++) {
+						if (x >= Settings.nTicTacTocBlockWidth)
+							break;
+						if (tictactocBoardStatues[x][j] == Settings.nComputerAiTagNumber) {
+							nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
+						} else
+							break;
+					}
+
+					// 오른쪽 위 대각선 AI
+					for (int x = i + 1, y = j - 1;; x++, y--) {
+						if (x >= Settings.nTicTacTocBlockWidth)
+							break;
+						if (y < 0)
+							break;
+						if (tictactocBoardStatues[x][y] == Settings.nComputerAiTagNumber) {
+							nWeightTictactocBoard[i][j] += Settings.nAiTicTacTocWeight;
+							_weight++;
+						} else
+							break;
+					}
+				}
+
+			} else {
+				nWeightTictactocBoard[i][j] = Settings.ERRORCODE;
+			}
 		}
 
 		/**

@@ -30,6 +30,7 @@ public class ServerStarterProcessor extends Application {
 		if (Settings.isDevelopingMode)
 			BuildingTimeReadFile();
 
+		System.out.println("test");
 		System.out.println("Start Server");
 
 		// set the window's title

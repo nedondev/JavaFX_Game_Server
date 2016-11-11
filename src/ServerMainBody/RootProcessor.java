@@ -61,6 +61,8 @@ public class RootProcessor implements Initializable {
         imv.setLayoutY(500);
         // set image Height size
         imv.setFitHeight(300);
+        imv.setScaleY(2);
+        
         // set image Width size
         imv.setFitWidth(500);
 
