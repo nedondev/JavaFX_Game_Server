@@ -30,17 +30,20 @@ you must follow below steps.
 Demo 1.0.0v ( 2016. 02. 18 )
 ---
 [![Demo CountPages alpha](https://j.gifs.com/QWpQMq.gif)](https://www.youtube.com/watch?v=FL4wDB9cNoI)
-######if you want to see the video, click gif image
+
+###### if you want to see the video, click gif image
 <br></br>
 Demo 2.0.0v ( 2016. 08. 15 )
 ---
 [![Demo CountPages alpha](https://j.gifs.com/Krj0qz.gif)](https://www.youtube.com/watch?v=nsrxQKbuJUc&feature=youtu.be&list=PL0bFPqEKbn-HNJvNN4sN0yYNrqEZ5iJzK)
-######if you want to see the video, click gif image
+
+###### if you want to see the video, click gif image
 <br></br>
 Demo 3.0.0v ( 2016. 09. 26  - NOW )
 ---
 [![Demo CountPages alpha](https://j.gifs.com/73GVOB.gif)](https://www.youtube.com/watch?v=fykKL4AhOC4&feature=youtu.be)
-######if you want to see the video, click gif image
+
+###### if you want to see the video, click gif image
 
 <br></br>
 Step contribution
