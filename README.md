@@ -1,6 +1,6 @@
 # JavaFX_Game_Server
-####this project is made by j.r.c Jong Uk.
-####this project's purpose is that service game server, or other server.
+#### this project is made by j.r.c Jong Uk.
+#### this project's purpose is that service game server, or other server.
 <br></br>
 License
 ---
