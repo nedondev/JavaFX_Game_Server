@@ -65,6 +65,8 @@ Contributor
 ---
 LOGO Designer : Jaeseong Im
 
+Text Designer : Seungbeom Choi 
+
 <br></br>
 Contact
 ---
